@@ -2,7 +2,7 @@
  *  MIT License
  *
  *  Copyright (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam 
-
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -22,14 +22,15 @@
  * SOFTWARE.
  *******************************************************************************/
 
-/**@file TaskPlanner.hpp
- * @brief Header file for Task planner module to make high-level decisions for 
- *        switching between navigation, manipulation and obstacle avoidance tasks
- *
- * Detailed description follows here.
- * @author     : Abhinav Modi
- * @created on : Dec 1, 2019
+/**
+ * @file        TaskPlanner.hpp
+ * @author      Abhinav Modi
+ * @copyright   MIT License (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam 
+ * @date        Dec 1, 2019
+ * @brief       Header file for Task planner module to make high-level decisions for 
+ *              switching between navigation, manipulation and obstacle avoidance tasks
  */
+
 #ifndef INCLUDE_TASKPLANNER_HPP_
 #define INCLUDE_TASKPLANNER_HPP_
 
@@ -42,51 +43,68 @@
 
 class TaskPlanner {
  public:
-    /**
-     * @brief search operation for scanning the area for ArUco markers  
-     * @param None
-     * @return None
-     */
-    void search();
-    
-    /**
-     * @brief inRangeCheck method checks if the toy object is in a reachable range
-     *        for the manipulator 
-     * @param None
-     * @return bool - returns true if the toy object is in range otherwise false
-     */
-    bool inRangeCheck();
-    
-    /**
-     * @brief Method to add a new task to the planner 
-     * @param taskID - integer id for the new task
-     * @param taskName - Definition of the new task 
-     * @return None
-     */
-    void addNewTask(int taskID, std::string taskName);
-    
-    /**
-     * @brief currTask outputs the integer index of the current task being 
-     *        performed by the robot 
-     * @param None
-     * @return int - integer ID of the task
-     */
-    int currTask();
-    
-    /**
-     * @brief Main method which switches from the current task to the next one 
-     *        based on feedback from the robot.
-     * @param None
-     * @return None
-     */
-    void taskPlanner();
+
+  /**
+   * @brief search operation for scanning the area for ArUco markers  
+   *
+   * @param None
+   *
+   * @return None
+   */
+  void search();
+
+  /**
+   * @brief inRangeCheck method checks if the toy object is in a reachable range
+   *        for the manipulator 
+   *
+   * @param None
+   *
+   * @return bool Returns true if the toy object is in range otherwise false
+   */
+  bool inRangeCheck();
+
+  /**
+   * @brief Method to add a new task to the planner 
+   *
+   * @param taskID  Integer id for the new task
+   *
+   * @param taskName  Definition of the new task 
+   *
+   * @return None
+   */
+  void addNewTask(int taskID, std::string taskName);
+
+  /**
+   * @brief currTask outputs the integer index of the current task being 
+   *        performed by the robot 
+   *
+   * @param None
+   *
+   * @return int Integer ID of the task
+   */
+  int currTask();
+
+  /**
+   * @brief Main method which switches from the current task to the next one 
+   *        based on feedback from the robot.
+   *
+   * @param None
+   *
+   * @return None
+   */
+  void taskPlanner();
 
  private :
-    /**
-     * @brief map object which contains the list of tasks to be performed
-     *        by the robot indexed by an integer key for each task.
-     */
-    std::map<int, std::string> taskList; 
+  /**
+   * @brief map object which contains the list of tasks to be performed
+   *        by the robot indexed by an integer key for each task.
+   */
+  std::map<int, std::string> taskList; 
+
+  /**
+   * @brief 2D grid map of the world for navigation purposes
+   */
+  cv::Mat map; 
 }
 
 #endif  // INCLUDE_TASKPLANNER_HPP_
