@@ -2,7 +2,7 @@
  *  MIT License
  *
  *  Copyright (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam 
-
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -22,14 +22,15 @@
  * SOFTWARE.
  *******************************************************************************/
 
-/**@file toyDetection.hpp
- * @brief Header file for ToyDetection module to detect and locate toys in the
- *        robot's base frame using ArUco markers present on the toys.
- *
- * Detailed description follows here.
- * @author     : Abhinav Modi
- * @created on : Dec 1, 2019
+/**
+ * @file        ToyDetection.hpp
+ * @author      Abhinav Modi
+ * @copyright   MIT License (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam 
+ * @date        Dec 1, 2019
+ * @brief       Header file for ToyDetection module to detect and locate toys in the
+ *              robot's base frame using ArUco markers present on the toys.
  */
+
 #ifndef INCLUDE_TOYDETECTION_HPP_
 #define INCLUDE_TOYDETECTION_HPP_
 
@@ -42,28 +43,34 @@
 
 class ToyDetction {
  public:
-    /**
-     * @brief detectArUco detects the ArUco marker in the current image frame
-     *        and stores the position of the toy and its ID 
-     * @param currFrame - current image frame
-     * @return None
-     */
-    void detectArUco(cv::Mat currFrame);
-    
-    /**(MAYBE NOT REQUIRED)
-     * @brief toyPositionPublisher publishes the pose of the detected toy(ArUco) 
-     * @param None
-     * @return None
-     */
-    void toyPositionPublisher();
 
-    /**
-     * @brief camFeedCb is the callback function for the camera feed ROS 
-     *        subscriber
-     * @param None
-     * @return None
-     */
-    void camFeedCb();
+  /**
+   * @brief detectArUco detects the ArUco marker in the current image frame
+   *        and stores the position of the toy and its ID 
+   *
+   * @param currFrame Current image frame
+   *
+   * @return None
+   */
+  void detectArUcoCb(cv::Mat currFrame);
+  
+  /**
+   * @brief Publishes the pose of the detected toy(ArUco) 
+   *
+   * @param None
+   *
+   * @return None
+   */
+  void toyPositionPub();
+
+  /**
+   * @brief Callback function for the camera feed ROS subscriber
+   *
+   * @param None
+   *
+   * @return None
+   */
+  void camFeedCb();
 
  private :
     /**
