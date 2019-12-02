@@ -2,7 +2,7 @@
  *  MIT License
  *
  *  Copyright (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam 
-
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -22,15 +22,16 @@
  * SOFTWARE.
  *******************************************************************************/
 
-/**@file manipulation.hpp
- * @brief Header file for Manipulation module. It contains functions 
- *        and data members required for the manipulation tasks like picking up
- *        and placing objects.
- *
- * Detailed description follows here.
- * @author     : Abhinav Modi
- * @created on : Dec 1, 2019
+/**
+ * @file        Navigation.hpp
+ * @author      Abhinav Modi
+ * @copyright   MIT License (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam 
+ * @date        Dec 1, 2019
+ * @brief       Header file for Manipulation module. It contains functions 
+ *              and data members required for the manipulation tasks like picking up
+ *              and placing objects.
  */
+
 #ifndef INCLUDE_MANIPULATION_HPP_
 #define INCLUDE_MANIPULATION_HPP_
 
@@ -43,34 +44,40 @@
 
 class Manipulation {
  public:
-    /**
-     * @brief getToyPosition gets the position of the toy to be picked up from
-     *        the ToyDetection module
-     * @param None
-     * @return None
-     */
-    void getToyPosition();
-    
-    /**
-     * @brief Method for picking up the desired object at a known position  
-     * @param None
-     * @return bool - returns true if the object is successfully picked up else
-     *                false
-     */
-    bool pickup();
-    
-    /**
-     * @brief Method for dropping the object in hand at a desired location 
-     * @param None
-     * @return bool - returns true of the drop operation is successful else false
-     */
-    bool drop();
+  /**
+   * @brief getToyPosition gets the position of the toy to be picked up from
+   *        the ToyDetection module
+   *
+   * @param None
+   *
+   * @return None
+   */
+  void getToyPosition();
+  
+  /**
+   * @brief Method for picking up the desired object at a known position  
+   *
+   * @param None
+   *
+   * @return bool - returns true if the object is successfully picked up else
+   *                false
+   */
+  bool pickup();
+  
+  /**
+   * @brief Method for dropping the object in hand at a desired location 
+   *
+   * @param None
+   *
+   * @return bool - returns true of the drop operation is successful else false
+   */
+  bool drop();
 
  private :
-    /**
-     * @brief position of the toy object undergoing a manipulation task 
-     */
-    geometry_msgs::Pose toyPosition;
+  /**
+   * @brief position of the toy object undergoing a manipulation task 
+   */
+  geometry_msgs::Pose toyPosition;
 }
 
 #endif  // INCLUDE_MANIPULATION_HPP_
