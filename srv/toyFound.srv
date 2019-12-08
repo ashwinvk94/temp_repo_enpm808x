@@ -1,0 +1,5 @@
+# service for toy detection flag : is the toy is detected
+std_msgs/Int32 id
+---
+std_msgs/Bool detection
+geometry_msgs/PoseStamped toyPose

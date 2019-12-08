@@ -39,10 +39,11 @@
 #include <tf/transform_listener.h>
 #include "ros/ros.h"
 #include "geometry_msgs/PoseStamped.h"
+#include "kids_next_door/toyFound.h"
 
-class ToyDetction {
+class ToyDetection {
  public:
-
+  ToyDetection();
   /**
    * @brief detectArUco detects the ArUco marker in the current image frame
    *        and stores the position of the toy and its ID 
@@ -51,7 +52,7 @@ class ToyDetction {
    *
    * @return None
    */
-  void update();
+  void initializeSubscribers();
   
   /**
    * @brief Publishes the pose of the detected toy(ArUco) 
@@ -60,7 +61,9 @@ class ToyDetction {
    *
    * @return None
    */
-  void toyPositionPub();
+  void detectionCb();
+  void initializePublishers();
+  void detectArUco();
 
   /**
    * @brief Callback function for the camera feed ROS subscriber
@@ -70,6 +73,10 @@ class ToyDetction {
    * @return None
    */
   void camFeedCb();
+
+  void detectionCb(const std_msgs::Bool::ConstPtr& detectionFlag);
+  bool findToySrv(kids_next_door::toyFound::Request& req,
+                           kids_next_door::toyFound::Response& resp);
 
  private :
     
@@ -98,7 +105,11 @@ class ToyDetction {
      */
     double tagPosY;
 	
-    geometry_msgs::PoseStamped tagPoseStamped;    
-}
+    geometry_msgs::PoseStamped tagPoseStamped;  
+
+    ros::NodeHandle nh;  
+    std_msgs::Bool detectionFlag;
+    geometry_msgs::PoseStamped toyPose;
+};
 
 #endif  // INCLUDE_TOYDETECTION_HPP_

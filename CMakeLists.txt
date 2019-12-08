@@ -8,13 +8,13 @@ project(kids_next_door)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-
   genmsg
   message_generation
   actionlib
   move_base_msgs
   geometry_msgs
   roscpp
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -59,7 +59,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## Generate services in the 'srv' folder
 add_service_files(
-  FILES moveTo.srv
+  FILES moveTo.srv toyFound.srv
 )
 
 ## Generate actions in the 'action' folder
@@ -141,11 +141,11 @@ include_directories(
 add_executable(Navigation src/Navigation.cpp)
 target_link_libraries(Navigation ${catkin_LIBRARIES})
 
-#add_executable(ToyDetection src/ToyDetection.cpp)
-#target_link_libraries(ToyDetection ${catkin_LIBRARIES})
+add_executable(ToyDetection src/ToyDetection.cpp)
+target_link_libraries(ToyDetection ${catkin_LIBRARIES})
 
-add_executable(test_move_base src/test_move_base.cpp)
-target_link_libraries(test_move_base ${catkin_LIBRARIES})
+#add_executable(test_move_base src/test_move_base.cpp)
+#target_link_libraries(test_move_base ${catkin_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
