@@ -8,10 +8,12 @@ project(kids_next_door)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+
+
+  actionlib
+  move_base_msgs
   geometry_msgs
   roscpp
-  rospy
-  std_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -117,7 +119,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+	include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -136,6 +138,15 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/kids_next_door_node.cpp)
 
+add_executable(Navigation src/Navigation.cpp)
+target_link_libraries(Navigation ${catkin_LIBRARIES})
+
+#add_executable(ToyDetection src/ToyDetection.cpp)
+#target_link_libraries(ToyDetection ${catkin_LIBRARIES})
+
+add_executable(test_move_base src/test_move_base.cpp)
+target_link_libraries(test_move_base ${catkin_LIBRARIES})
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -147,9 +158,6 @@ include_directories(
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(${PROJECT_NAME}_node
-#   ${catkin_LIBRARIES}
-# )
 
 #############
 ## Install ##

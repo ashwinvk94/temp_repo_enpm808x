@@ -23,82 +23,103 @@
  *******************************************************************************/
 
 /**
- * @file        ToyDetection.hpp
- * @author      Abhinav Modi
+ * @file        ROSModule.hpp
+ * @author      Rohan Singh
  * @copyright   MIT License (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam 
- * @date        Dec 1, 2019
- * @brief       Header file for ToyDetection module to detect and locate toys in the
- *              robot's base frame using ArUco markers present on the toys.
+ * @date        Dec 6, 2019
+ * @brief       Base Header file for ROS Modules
  */
 
-#ifndef INCLUDE_TOYDETECTION_HPP_
-#define INCLUDE_TOYDETECTION_HPP_
+#ifndef INCLUDE_ROSMODULE_HPP_
+#define INCLUDE_ROSMODULE_HPP_
 
 #include <iostream>
 #include <vector>
-#include <tf/transform_listener.h>
 #include "ros/ros.h"
-#include "geometry_msgs/PoseStamped.h"
 
-class ToyDetction {
+class ROSModule {
  public:
 
   /**
-   * @brief detectArUco detects the ArUco marker in the current image frame
-   *        and stores the position of the toy and its ID 
-   *
-   * @param currFrame Current image frame
-   *
-   * @return None
-   */
-  void update();
-  
-  /**
-   * @brief Publishes the pose of the detected toy(ArUco) 
+   * @brief Constructor for class
    *
    * @param None
    *
    * @return None
    */
-  void toyPositionPub();
+  ROSModule(){};
 
   /**
-   * @brief Callback function for the camera feed ROS subscriber
+   * @brief Destructor for class
    *
    * @param None
    *
    * @return None
    */
-  void camFeedCb();
+  virtual ~ROSModule(){};
 
- private :
-    
-    /**
-     * @brief tf listener to get value of transforms in tf
-     */
-    tf::TransformListener listener;
-    
-    /**
-     * @brief tf tranform to store the transform
-     */
-    tf::StampedTransform transform;
-    
-    /**
-     * @brief tag ID of the current toy being searched for
-     */
-    double currToyID;
+  /**
+   * @brief Function to initialize Subscribers for node
+   *
+   * @param None
+   *
+   * @return None
+   */
+  virtual void initializeSubscribers(){};
 
-    /**
-     * @brief X coordinate of the tag wrt to the /base_footprint frame
-     */
-    double tagPosX;
-    
-    /**
-     * @brief Y coordinate of the tag wrt to the /base_footprint frame
-     */
-    double tagPosY;
-	
-    geometry_msgs::PoseStamped tagPoseStamped;    
-}
+  /**
+   * @brief Function to initialize Publishers for node
+   *
+   * @param None
+   *
+   * @return None
+   */
+  virtual void initializePublishers(){};
 
-#endif  // INCLUDE_TOYDETECTION_HPP_
+  /**
+   * @brief Function to initialize Service Servers for node
+   *
+   * @param None
+   *
+   * @return None
+   */
+  virtual void initializeServiceServers(){};
+
+  /**
+   * @brief Function to initialize Service Clients for node
+   *
+   * @param None
+   *
+   * @return None
+   */
+  virtual void initializeServiceClients(){};
+
+  /**
+   * @brief Function to initialize Action Client for node
+   *
+   * @param None
+   *
+   * @return None
+   */
+  virtual void initializeActionClients(){};
+
+  /**
+   * @brief Function to initialize Transform Broadcasters for node
+   *
+   * @param None
+   *
+   * @return None
+   */
+  virtual void initializeTransformBroadcaster(){};
+
+  /**
+   * @brief Function to initialize Transform Listener for node
+   *
+   * @param None
+   *
+   * @return None
+   */
+  virtual void initializeTransformListener(){};
+};
+
+#endif  // INCLUDE_ROSMODULE_HPP_

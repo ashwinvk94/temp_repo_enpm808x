@@ -36,13 +36,16 @@
 
 #include <iostream>
 #include <vector>
-#include <opencv/core/core.hpp>
-#include <opencv/highgui/highgui.hpp>
-#include <opencv/imgproc/imgproc.hpp>
+#include <move_base_msgs/MoveBaseAction.h>
+#include <actionlib/client/simple_action_client.h>
 #include "ros/ros.h"
-
-class Navigation {
+#include "../include/ROSModule.hpp"
+#include "geometry_msgs/PoseStamped.h"
+#include "geometry_msgs/Pose.h"
+class Navigation : public ROSModule {
  public:
+
+  Navigation();
   /**
    * @brief Callback method for the robot location subscriber  
    *
@@ -60,7 +63,7 @@ class Navigation {
    *
    * @return None
    */
-  void moveBasePub(geometry_msgs::PoseStamped pos);
+  void moveToCb(const geometry_msgs::Pose::ConstPtr& data);
 
   /**
    * @brief Method for getting current pose of the robot
@@ -69,13 +72,21 @@ class Navigation {
    *
    * @return Returns variable currPos
    */
-  geometry_msgs::PoseStamped getCurrPose();
+  void initializeSubscribers();
+
+  void goalPosCb(const geometry_msgs::Pose::ConstPtr& data);
     
  private :
   /**
-   * @brief current Pose of the robot in the world coordinate frame  
+   * @brief pose of the target in the robot's body frame   
    */
-  geometry_msgs::Pose currPos;
-}
+  move_base_msgs::MoveBaseGoal goal;
+
+  /**
+   * @brief pose of the target in the robot's body frame   
+   */
+  ros::NodeHandle handler;
+
+};
 
 #endif  // INCLUDE_NAVIGATION_HPP_
