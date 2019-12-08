@@ -10,11 +10,13 @@ Navigation::Navigation() {
 void Navigation::initializeSubscribers() {
     ros::Subscriber goalSub = handler.subscribe("/knd/goalPose",10, &Navigation::goalPosCb,this);
     ros::Subscriber moveToSub = handler.subscribe("/knd/moveTo",10, &Navigation::moveToCb,this);
+    ros::ServiceServer server = handler.advertiseService("/knd/moveTo", &Navigation::moveToSrv, this);
     ROS_INFO_STREAM("Started subscriber");
     ros::spin();
 }
 void Navigation::initializeServiceServers() {
-    ros::ServiceServer server = handler.advertiseService("/knd/moveTo", &Navigation::moveToSrv, this);
+    ROS_INFO_STREAM("Running Service");
+    ros::spin();
 }
 
 void Navigation::goalPosCb(const geometry_msgs::Pose::ConstPtr& data) {
@@ -58,7 +60,6 @@ bool Navigation::moveToSrv(kids_next_door::moveTo::Request& req,
     }
     // get new target position
     geometry_msgs::Pose data = req.goalPose;
-    ROS_INFO_STREAM("Running");
     goal.target_pose.header.frame_id = "map";
     goal.target_pose.header.stamp = ros::Time::now();
 
