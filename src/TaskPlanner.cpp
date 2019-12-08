@@ -164,38 +164,48 @@ void TaskPlanner::taskPlanner() {
                 } else {        // Search if can't see toy
                     ROS_INFO_STREAM("Looking for toy with ID : "
                                     << *currToyID);
-                    if (search(*currSearchPose) != 1) {
+                    if (currSearch == searchPoses.end()) {
+                        /* Current ID could not be found, move to next */
+                        ROS_INFO_STREAM("Current ID could not be found,
+                                             moving to next.");
+                        storedToyFlag = 1;
+                    } else if (search(*currSearchPose) != 1) {
                         currSearchPose++;
                     }
                 }
+            }
             /* If toy has been reached, pick up toy */
-            } else if (reachedToyFlag == 1 && pickedToyFlag == 0) {
+            if (reachedToyFlag == 1 && pickedToyFlag == 0) {
                 ROS_INFO_STREAM("Picking up toy with ID : " << *currToyID);
                 if (pickUpToy() == 1) {
                     ROS_INFO_STREAM("Picked up toy with ID : " << *currToyID);
                     pickedToyFlag = 1;
                 }
+            }
             /* If toy has been picked, go to storage */
-            } else if (pickedToyFlag == 1 && reachedStorgeFlag == 0){
+            if (pickedToyFlag == 1 && reachedStorgeFlag == 0){
                 ROS_INFO_STREAM("Going to storage");
                 if (goToStorage() == 1) {
                     ROS_INFO_STREAM("Reached storage");
                     reachedStorgeFlag = 1;
                 }
+            }
             /* If storage has been reached, keep toy back */
-            } else if (reachedStorgeFlag == 1 && storedToyFlag == 0) {
+            if (reachedStorgeFlag == 1 && storedToyFlag == 0) {
                 ROS_INFO_STREAM("Storing toy with ID : " << *currToyID);
                 if (storeToy() == 1) {
                     ROS_INFO_STREAM("Stored toy with ID : " << *currToyID);
                     storedToyFlag = 1;
                 }
+            }
             /* If toy is placed in storage, move to next */
-            } else if (storedToyFlag == 1) {
+            if (storedToyFlag == 1) {
                 currToyID++;
                 reachedToyFlag = 0;
                 pickedToyFlag = 0;
                 reachedStorgeFlag = 0;
                 storedToyFlag = 0;
+                currSearchPose = searchPoses.begin();
             }
 
             /* If all toys have been stored */
