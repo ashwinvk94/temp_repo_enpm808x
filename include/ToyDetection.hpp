@@ -64,7 +64,7 @@ class ToyDetection : public ROSModule {
    */
   void detectionCb();
   void initializePublishers();
-  void detectArUco();
+  int detectArUco();
 
   /**
    * @brief Callback function for the camera feed ROS subscriber
