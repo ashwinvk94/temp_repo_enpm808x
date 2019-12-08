@@ -42,6 +42,9 @@
 #include "../include/ROSModule.hpp"
 #include "geometry_msgs/PoseStamped.h"
 #include "geometry_msgs/Pose.h"
+#include "kids_next_door/moveTo.h"
+
+
 class Navigation : public ROSModule {
  public:
 
@@ -65,6 +68,8 @@ class Navigation : public ROSModule {
    */
   void moveToCb(const geometry_msgs::Pose::ConstPtr& data);
 
+  bool moveToSrv(kids_next_door::moveTo::Request& req, 
+                 kids_next_door::moveTo::Response& resp);
   /**
    * @brief Method for getting current pose of the robot
    *
@@ -73,6 +78,8 @@ class Navigation : public ROSModule {
    * @return Returns variable currPos
    */
   void initializeSubscribers();
+
+  void initializeServiceServers();
 
   void goalPosCb(const geometry_msgs::Pose::ConstPtr& data);
     

@@ -1,0 +1,3 @@
+# Message to specify the new goal position
+geometry_msgs/Pose goalPose
+---
