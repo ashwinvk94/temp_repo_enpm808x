@@ -105,6 +105,16 @@ class TaskPlanner {
    * @brief 2D grid map of the world for navigation purposes
    */
   cv::Mat map; 
+
+  /**
+   * @brief List of ArUco tag IDs to be picked
+   */
+  std::vector<int> toyIDs; 
+
+  /**
+   * @brief ROS Node frequency
+   */
+  int nodeHz = 20;
 }
 
 #endif  // INCLUDE_TASKPLANNER_HPP_
