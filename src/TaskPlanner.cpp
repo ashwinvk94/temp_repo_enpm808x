@@ -43,38 +43,53 @@ TaskPlanner::TaskPlanner() {
     }
     /* Create ROS node handle */
     ros::NodeHandle nh;
-  
+
+    /* List of trajectory points for search */
 }
 
 ~TaskPlanner::TaskPlanner() {
 
 }
 
-void TaskPlanner::initializePublishers() {
-    ROS_INFO_STREAM("Initializing Publishers...");
+// void TaskPlanner::initializePublishers() {
+//     ROS_INFO_STREAM("Initializing Publishers...");
 
-    /* Publisher for toy ID lookup */
-    toyIDPub = nh.advertise<std_msgs::Int32>("/knd/toyID", 1, true);
+//     /* Publisher for toy ID lookup */
+//     toyIDPub = nh.advertise<std_msgs::Int32>("/knd/toyID", 1, true);
 
-    /* Publisher for desired robot pose */
-    goalPosePub = nh.advertise<geometric_msgs::PoseStamped>
-                    ("/knd/goalPose", 1, true);
-}
+//     /* Publisher for desired robot pose */
+//     goalPosePub = nh.advertise<geometric_msgs::PoseStamped>
+//                     ("/knd/goalPose", 1, true);
+// }
 
-void TaskPlanner::initializeSubscribers() {
-    ROS_INFO_STREAM("Initializing Subscribers...");
+// void TaskPlanner::initializeSubscribers() {
+//     ROS_INFO_STREAM("Initializing Subscribers...");
 
-    /* Subscriber for checking toy visibility */
-    toyFoundSub = nh.subscribe("/knd/toyFoundFlag", 1,
-                    &TaskPlanner::toyFoundCallback, this);
+//     /* Subscriber for checking toy visibility */
+//     toyFoundSub = nh.subscribe("/knd/toyFoundFlag", 1,
+//                     &TaskPlanner::toyFoundCallback, this);
 
-    /* Subscriber for current robot pose */
-    currPoseSub = nh.subscribe("/knd/currPose", 1,
-                    &TaskPlanner::currPoseCallback, this);
+//     /* Subscriber for current robot pose */
+//     currPoseSub = nh.subscribe("/knd/currPose", 1,
+//                     &TaskPlanner::currPoseCallback, this);
 
-    /* Subscriber for current toy pose */
-    toyPoseSub = nh.subscribe("/knd/toyPose", 1,
-                    &TaskPlanner::toyPoseCallback, this);
+//     /* Subscriber for current toy pose */
+//     toyPoseSub = nh.subscribe("/knd/toyPose", 1,
+//                     &TaskPlanner::toyPoseCallback, this);
+// }
+
+void TaskPlanner::initializeServiceClients() {
+    ROS_INFO_STREAM("Initializing Service Clients...");
+
+    /* Client for checking toy visibility */
+    toyFoundClient = nh.serviceClient<kid_next_door::toyFound>(
+                    "/knd/toyFoundService");
+
+    /* Client for setting robot goal pose */
+    goalPoseClient = nh.serviceClient<kids_next_door::moveTo>(
+                    "/knd/goalPose");
+
+    /* Client for picking up block */
 }
 
 // void TaskPlanner::explore() {
@@ -103,18 +118,18 @@ void TaskPlanner::taskPlanner() {
     /* Set node rate */
     ros::Rate loopRate(nodeHz);
 
-    bool reachedToyFlag = false;
-    bool pickedToyFlag = false;
-    bool reachedStorgeFlag = false;
-    bool storedToyFlag = false;
-    bool cleanupFlag = false;
+    int reachedToyFlag = 0;
+    int pickedToyFlag = 0;
+    int reachedStorgeFlag = 0;
+    int storedToyFlag = 0;
+    int cleanupFlag = 0;
 
     while (ros::ok()) {
         /* If cleanup of toys needs to be done */
-        if (!cleanupFlag) {
+        if (cleanupFlag == 0) {
             /* If toy hasn't been reached */
-            if (!reachedToyFlag) {
-                if (lookForToy(*currToyID)) {   // Look for toy
+            if (reachedToyFlag == 0) {
+                if (lookForToy(*currToyID) == 1) {   // Look for toy
                     ROS_INFO_STREAM("Found for toy with ID : " << *currToyID);
                     reachedToyFlag = goToToy();
                 } else {        // Search if can't see toy
@@ -123,33 +138,33 @@ void TaskPlanner::taskPlanner() {
                     search();
                 }
             /* If toy has been reached, pick up toy */
-            } else if (reachedToyFlag && !pickedToyFlag) {
+            } else if (reachedToyFlag == 1 && pickedToyFlag == 0) {
                 ROS_INFO_STREAM("Picking up toy with ID : " << *currToyID);
-                if (pickUpToy()) {
+                if (pickUpToy() == 1) {
                     ROS_INFO_STREAM("Picked up toy with ID : " << *currToyID);
-                    pickedToyFlag = true;
+                    pickedToyFlag = 1;
                 }
             /* If toy has been picked, go to storage */
-            } else if (pickedToyFlag && !reachedStorgeFlag){
+            } else if (pickedToyFlag == 1 && reachedStorgeFlag == 0){
                 ROS_INFO_STREAM("Going to storage");
-                if (goToStorage()) {
+                if (goToStorage() == 1) {
                     ROS_INFO_STREAM("Reached storage");
-                    reachedStorgeFlag = true;
+                    reachedStorgeFlag = 1;
                 }
             /* If storage has been reached, keep toy back */
-            } else if (reachedStorgeFlag && ! storedToyFlag) {
+            } else if (reachedStorgeFlag == 1 && storedToyFlag == 0) {
                 ROS_INFO_STREAM("Storing toy with ID : " << *currToyID);
-                if (storeToy()) {
+                if (storeToy() == 1) {
                     ROS_INFO_STREAM("Stored toy with ID : " << *currToyID);
-                    storedToyFlag = true;
+                    storedToyFlag = 1;
                 }
             /* If toy is placed in storage, move to next */
-            } else if (storedToyFlag) {
+            } else if (storedToyFlag == 1) {
                 currToyID++;
-                reachedToyFlag = false;
-                pickedToyFlag = false;
-                reachedStorgeFlag = false;
-                storedToyFlag = false;
+                reachedToyFlag = 0;
+                pickedToyFlag = 0;
+                reachedStorgeFlag = 0;
+                storedToyFlag = 0;
             }
 
             /* If all toys have been stored */
@@ -159,37 +174,65 @@ void TaskPlanner::taskPlanner() {
             }
         } else {
             shutdownRobot();
+            break;
         }
     }
 }
 
-bool TaskPlanner::lookForToy(int toyID) {
-    std_msgs::Int32 _toyID;
-    _toyID.data = toyID;
-    toyIDPub.publish(_toyID);
-    return toyFoundFlag.data;
+int TaskPlanner::lookForToy(int toyID) {
+    kid_next_door::toyFound srv;
+    srv.request.id = toyID;
+    if (toyFoundClient.call(srv)) {
+        toyPose = srv.response.toyPose;
+        if (srv.response.toyFoundFlag) {
+            return 1;
+        } else {
+            return 0;
+        }
+    } else {
+        ROS_INFO_STREAM("Failed to call toyFound service.");
+        return -1;
+    }
 }
 
-bool TaskPlanner::goToToy() {
-
+int TaskPlanner::goToToy() {
+    kids_next_door::moveTo srv;
+    srv.request.goal = toyPose;
+    if (goalPoseClient.call(srv)) {
+        if (srv.response.goalReachedFlag) {
+            return 1;
+        } else {
+            return 0;
+        }
+    } else {
+        ROS_INFO_STREAM("Failed to call moveTo service.");
+        return -1;
+    }
 }
 
-bool TaskPlanner::pickUpToy() {
-
+int TaskPlanner::pickUpToy() {
+    return 1;
 }
 
-bool TaskPlanner::goToStorage() {
-
+int TaskPlanner::goToStorage() {
+    kids_next_door::moveTo srv;
+    srv.request.goal = storagePose;
+    if (goalPoseClient.call(srv)) {
+        if (srv.response.goalReachedFlag) {
+            return 1;
+        } else {
+            return 0;
+        }
+    } else {
+        ROS_INFO_STREAM("Failed to call moveTo service.");
+        return -1;
+    }
 }
 
-bool TaskPlanner::storeToy() {
-
+int TaskPlanner::storeToy() {
+    return 1;
 }
 
 void TaskPlanner::shutdownRobot() {
-
-}
-
-bool TaskPlanner::() {
 
 }
