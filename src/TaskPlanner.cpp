@@ -118,13 +118,14 @@ void TaskPlanner::taskPlanner() {
                     ROS_INFO_STREAM("Found for toy with ID : " << *currToyID);
                     reachedToyFlag = goToToy();
                 } else {        // Search if can't see toy
-                    ROS_INFO_STREAM("Looking for toy with ID : " << *currToyID);
+                    ROS_INFO_STREAM("Looking for toy with ID : "
+                                    << *currToyID);
                     search();
                 }
             /* If toy has been reached, pick up toy */
             } else if (reachedToyFlag && !pickedToyFlag) {
                 ROS_INFO_STREAM("Picking up toy with ID : " << *currToyID);
-                if (pickupToy()) {
+                if (pickUpToy()) {
                     ROS_INFO_STREAM("Picked up toy with ID : " << *currToyID);
                     pickedToyFlag = true;
                 }
@@ -157,7 +158,7 @@ void TaskPlanner::taskPlanner() {
                 cleanupFlag = true;
             }
         } else {
-
+            shutdownRobot();
         }
     }
 }
@@ -169,4 +170,26 @@ bool TaskPlanner::lookForToy(int toyID) {
     return toyFoundFlag.data;
 }
 
-void TaskPlan
+bool TaskPlanner::goToToy() {
+
+}
+
+bool TaskPlanner::pickUpToy() {
+
+}
+
+bool TaskPlanner::goToStorage() {
+
+}
+
+bool TaskPlanner::storeToy() {
+
+}
+
+void TaskPlanner::shutdownRobot() {
+
+}
+
+bool TaskPlanner::() {
+
+}
