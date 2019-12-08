@@ -1,3 +1,4 @@
 # Message to specify the new goal position
-geometry_msgs/Pose goalPose
+geometry_msgs/PoseStamped goalPose
 ---
+std_msgs/Bool reachedGoal

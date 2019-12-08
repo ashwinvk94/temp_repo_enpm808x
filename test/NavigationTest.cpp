@@ -41,8 +41,8 @@
  *
  * @return none
  */
-TEST(NavigationClassTest, TestMoveBasePub) {
-
+TEST(NavigationClassTest, TestMoveToService) {
+    
 }
 
 /**

@@ -49,15 +49,7 @@ class Navigation : public ROSModule {
  public:
 
   Navigation();
-  /**
-   * @brief Callback method for the robot location subscriber  
-   *
-   * @param None
-   *
-   * @return None
-   */
-  void localizeCb();
-   
+
   /**
    * @brief Method for publishing goal positions for the motion robot base
    *        through the environment  
@@ -66,7 +58,6 @@ class Navigation : public ROSModule {
    *
    * @return None
    */
-  void moveToCb(const geometry_msgs::Pose::ConstPtr& data);
 
   bool moveToSrv(kids_next_door::moveTo::Request& req, 
                  kids_next_door::moveTo::Response& resp);
@@ -77,12 +68,10 @@ class Navigation : public ROSModule {
    *
    * @return Returns variable currPos
    */
-  void initializeSubscribers();
+  // void initializeSubscribers();
 
   void initializeServiceServers();
-
-  void goalPosCb(const geometry_msgs::Pose::ConstPtr& data);
-    
+  void setGoal(const geometry_msgs::PoseStamped& goalPose);
  private :
   /**
    * @brief pose of the target in the robot's body frame   
@@ -93,6 +82,8 @@ class Navigation : public ROSModule {
    * @brief pose of the target in the robot's body frame   
    */
   ros::NodeHandle handler;
+
+  ros::ServiceServer server;
 
 };
 
