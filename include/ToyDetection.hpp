@@ -36,12 +36,13 @@
 
 #include <iostream>
 #include <vector>
+#include "../include/ROSModule.hpp"
 #include <tf/transform_listener.h>
 #include "ros/ros.h"
 #include "geometry_msgs/PoseStamped.h"
 #include "kids_next_door/toyFound.h"
 
-class ToyDetection {
+class ToyDetection : public ROSModule {
  public:
   ToyDetection();
   /**
@@ -107,8 +108,10 @@ class ToyDetection {
 	
     geometry_msgs::PoseStamped tagPoseStamped;  
 
-    ros::NodeHandle nh;  
+    ros::NodeHandle nh; 
+    
     std_msgs::Bool detectionFlag;
+
     geometry_msgs::PoseStamped toyPose;
 };
 

@@ -3,13 +3,14 @@
 #include "ToyDetection.hpp"
 
 ToyDetection::ToyDetection() {
-	initializeSubscribers();
 	initializePublishers();
+	initializeSubscribers();
 }
 
 void ToyDetection::initializeSubscribers(){
 	ros::Subscriber arucoSub = nh.subscribe("/knd/aruco_detected",10, &ToyDetection::detectionCb,this);
 	ros::ServiceServer server = nh.advertiseService("/knd/toyFound", &ToyDetection::findToySrv, this);
+	ros::spin();
 }
 
 bool ToyDetection::findToySrv(kids_next_door::toyFound::Request& req,
@@ -17,8 +18,9 @@ bool ToyDetection::findToySrv(kids_next_door::toyFound::Request& req,
     std_msgs::Int32 id = req.id;
 	ros::param::set("/aruco_single/marker_id", id.data);	
 	resp.detection = this->detectionFlag;
+	ToyDetection::detectArUco();
 	// geometry_msgs::PoseStamped emptyPose;
-	resp.toyPose = toyPose;
+	resp.toyPose = ToyDetection::toyPose;
 	return true;
 }
 
@@ -27,25 +29,23 @@ void ToyDetection::detectionCb(const std_msgs::Bool::ConstPtr& detectionFlag) {
 }
 
 void ToyDetection::initializePublishers(){
-	ros::Publisher tagPosePub = nh.advertise<geometry_msgs::PoseStamped>("knd/tag_pose", 1);	
-	ros::spin();
 }
 // cb for aruco detected (bool)
 void ToyDetection::detectArUco(){
-	listener.lookupTransform("/aruco_frame", "/base_footprint",ros::Time(0),transform);
+	listener.lookupTransform("/aruco_marker_frame", "/base_footprint",ros::Time(0),transform);
 	
 
-	toyPose.header.frame_id="/base_footprint";
-	toyPose.header.stamp = ros::Time::now();
+	ToyDetection::toyPose.header.frame_id="/base_footprint";
+	ToyDetection::toyPose.header.stamp = ros::Time::now();
 	
-	toyPose.pose.position.x = transform.getOrigin().x();
-	toyPose.pose.position.y = transform.getOrigin().y();
-	toyPose.pose.position.z = transform.getOrigin().z();
+	ToyDetection::toyPose.pose.position.x = transform.getOrigin().x();
+	ToyDetection::toyPose.pose.position.y = transform.getOrigin().y();
+	ToyDetection::toyPose.pose.position.z = transform.getOrigin().z();
 
-	toyPose.pose.orientation.x = transform.getRotation().x();
-	toyPose.pose.orientation.y = transform.getRotation().y();
-	toyPose.pose.orientation.z = transform.getRotation().z();
-	toyPose.pose.orientation.w = transform.getRotation().w();
+	ToyDetection::toyPose.pose.orientation.x = transform.getRotation().x();
+	ToyDetection::toyPose.pose.orientation.y = transform.getRotation().y();
+	ToyDetection::toyPose.pose.orientation.z = transform.getRotation().z();
+	ToyDetection::toyPose.pose.orientation.w = transform.getRotation().w();
 	
 }
 
@@ -54,7 +54,7 @@ int main(int argc, char** argv){
 
 	ROS_INFO_STREAM("Started ToyDetection node");
 	
-	ToyDetection toy_detection();
+	ROSModule * toy_detection =  new ToyDetection();
 
 	ros::spin();
 	return 0;
