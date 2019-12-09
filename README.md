@@ -14,7 +14,7 @@ This repository contains the simulation of a mobile manipulator robot, __Tiago++
 
 __Rohan Singh__: I am in my third semester of M.Eng. in Robotics at University of Maryland. You can follow me on my [Linkedin](www.linkedin.com/in/rohansingh42)
 
-__Abhinav Gupta__: I am in my third semester of M.Eng. in Robotics at University of Maryland. You can follow me on my [Linkedin](https://www.linkedin.com/in/abhinavmodi16/)
+__Abhinav Modi__: I am in my third semester of M.Eng. in Robotics at University of Maryland. You can follow me on my [Linkedin](https://www.linkedin.com/in/abhinavmodi16/)
 
 __Ashwin Varghese Kuruttukulam__: I am in my third semester of M.Eng. in Robotics at University of Maryland. You can follow me on my [Linkedin](https://www.linkedin.com/in/ashwinvk94/)
 
