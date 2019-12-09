@@ -81,29 +81,19 @@ class ToyDetection : public ROSModule {
 
  private :
     
-    /**
-     * @brief tf listener to get value of transforms in tf
-     */
+    /* tf listener to get value of transforms in tf */
     tf::TransformListener listener;
     
-    /**
-     * @brief tf tranform to store the transform
-     */
+    /* tf tranform to store the transform */
     tf::StampedTransform transform;
     
-    /**
-     * @brief tag ID of the current toy being searched for
-     */
+    /* tag ID of the current toy being searched for */
     double currToyID;
 
-    /**
-     * @brief X coordinate of the tag wrt to the /base_footprint frame
-     */
+    /* X coordinate of the tag wrt to the /base_footprint frame */
     double tagPosX;
     
-    /**
-     * @brief Y coordinate of the tag wrt to the /base_footprint frame
-     */
+    /* Y coordinate of the tag wrt to the /base_footprint frame */
     double tagPosY;
 	
     geometry_msgs::PoseStamped tagPoseStamped;  

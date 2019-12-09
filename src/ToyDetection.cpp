@@ -72,8 +72,6 @@ void ToyDetection::detectionCb(const std_msgs::Bool::ConstPtr& detectionFlagMsg)
 	this->detectionFlag = *detectionFlagMsg;
 }
 
-void ToyDetection::initializePublishers(){
-}
 // cb for aruco detected (bool)
 int ToyDetection::detectArUco(){
 	int flag;
