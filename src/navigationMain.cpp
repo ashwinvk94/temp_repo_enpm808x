@@ -23,25 +23,22 @@
  *******************************************************************************/
 
 /**
- * @file        toyDetectionNode.hpp
- * @author      Ashwin Kuruttukulam
- * @copyright   MIT License (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam
+ * @file        navigationMain.cpp
+ * @author      Abhinav Modi
+ * @copyright   MIT License (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam 
  * @date        Dec 1, 2019
- * @brief       ROS node for ToyDetection Module
+ * @brief       Main file to initialize the node for navigation module
  */
 
-#include <iostream>
-
-#include "ros/ros.h"
-#include "../include/ToyDetection.hpp"
+#include "../include/Navigation.hpp"
 
 int main(int argc, char** argv){
-	ros::init(argc, argv, "toyDetection"); //node name
+	ros::init(argc, argv, "navigation"); //node name
+	ROS_INFO_STREAM("Started navigation node");
 
-	ROS_INFO_STREAM("Started ToyDetection node");
-	
-	ToyDetection toyDetection;
+    Navigation nav;
+    ros::spin();
+	ROS_INFO_STREAM("Spinning");
 
-	ros::spin();
 	return 0;
-}
+};

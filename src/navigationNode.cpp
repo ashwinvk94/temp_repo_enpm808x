@@ -40,7 +40,7 @@ int main(int argc, char** argv){
 
 	ROS_INFO_STREAM("Started navigation node");
 	
-	ROSModule * nav =  new Navigation();
+	Navigation nav;
 	ROS_INFO_STREAM("Spinning");
 	
 	return 0;

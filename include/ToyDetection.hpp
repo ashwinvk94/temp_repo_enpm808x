@@ -62,8 +62,6 @@ class ToyDetection : public ROSModule {
    *
    * @return None
    */
-  void detectionCb();
-  void initializePublishers();
   int detectArUco();
 
   /**

@@ -145,9 +145,11 @@ include_directories(
 add_executable(Navigation src/navigationNode.cpp src/Navigation.cpp)
 target_link_libraries(Navigation ${catkin_LIBRARIES})
 add_dependencies(Navigation ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
 add_executable(ToyDetection src/toyDetectionNode.cpp src/ToyDetection.cpp)
 target_link_libraries(ToyDetection ${catkin_LIBRARIES})
 add_dependencies(ToyDetection ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
 add_executable(TaskPlanner src/taskPlannerNode.cpp src/TaskPlanner.cpp src/UserInterface.cpp)
 target_link_libraries(TaskPlanner ${catkin_LIBRARIES})
 add_dependencies(TaskPlanner ${${PROJECT_NAME}_EXPORTED_TARGETS})
@@ -215,8 +217,17 @@ add_dependencies(TaskPlanner ${${PROJECT_NAME}_EXPORTED_TARGETS})
 ## Testing ##
 #############
 
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
+  add_rostest_gtest(test1 test/kndTests.test
+                test/NavigationTest.cpp
+                src/Navigation.cpp)
+  target_link_libraries(test1 ${catkin_LIBRARIES})
+#  add_dependencies(kndTest ${catkin_EXPORTED_TARGETS})
+endif()
+
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_kids_next_door.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test           test/test_kids_next_door.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

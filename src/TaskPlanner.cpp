@@ -44,11 +44,6 @@
 #include "kids_next_door/toyFound.h"
 #include "../include/TaskPlanner.hpp"
 
-typedef actionlib::SimpleActionClient<control_msgs::PointHeadAction> PointHeadClient;
-typedef boost::shared_ptr<PointHeadClient> PointHeadClientPtr;
-
-PointHeadClientPtr pointHeadClient;
-
 TaskPlanner::TaskPlanner() {
     ROS_INFO_STREAM("Constructing TaskPlanner node...");
     /* Check if everything is OK */
@@ -108,7 +103,6 @@ TaskPlanner::TaskPlanner(std::istream& inputStream, std::ostream& outputStream) 
 }
 
 TaskPlanner::~TaskPlanner() {
-
 }
 
 void TaskPlanner::initializeServiceClients() {
@@ -121,25 +115,7 @@ void TaskPlanner::initializeServiceClients() {
     /* Client for setting robot goal pose */
     goalPoseClient = nh.serviceClient<kids_next_door::moveTo>(
                     "/knd/moveTo");
-
-    /* Client for picking up block */
 }
-
-// int TaskPlanner::search(geometry_msgs::PoseStamped searchPose) {
-//     ROS_INFO_STREAM("Searching for toys");
-//     kids_next_door::moveTo srv;
-//     srv.request.goalPose = searchPose;
-//     if (goalPoseClient.call(srv)) {
-//         if (srv.response.reachedGoal.data) {
-//             return 1;
-//         } else {
-//             return 0;
-//         }
-//     } else {
-//         ROS_INFO_STREAM("Failed to call moveTo service.");
-//         return -1;
-//     }
-// }
 
 int TaskPlanner::moveToPose(geometry_msgs::PoseStamped pose) {
     kids_next_door::moveTo srv;
@@ -237,6 +213,7 @@ int TaskPlanner::taskPlanner() {
             break;
         }
     }
+    ROS_INFO_STREAM("Shutting down...");
     return 1;
 }
 
@@ -257,46 +234,10 @@ int TaskPlanner::lookForToy(int toyID) {
     }
 }
 
-// int TaskPlanner::goToToy() {
-//     kids_next_door::moveTo srv;
-//     std::cout << toyPose;
-
-//     srv.request.goalPose = toyPose;
-//     if (goalPoseClient.call(srv)) {
-//         if (srv.response.reachedGoal.data) {
-//             return 1;
-//         } else {
-//             return 0;
-//         }
-//     } else {
-//         ROS_INFO_STREAM("Failed to call moveTo service.");
-//         return -1;
-//     }
-// }
-
 int TaskPlanner::pickUpToy() {
     return 1;
 }
 
-// int TaskPlanner::goToStorage() {
-//     kids_next_door::moveTo srv;
-//     srv.request.goalPose = storagePose;
-//     if (goalPoseClient.call(srv)) {
-//         if (srv.response.reachedGoal.data) {
-//             return 1;
-//         } else {
-//             return 0;
-//         }
-//     } else {
-//         ROS_INFO_STREAM("Failed to call moveTo service.");
-//         return -1;
-//     }
-// }
-
 int TaskPlanner::storeToy() {
     return 1;
 }
-
-// void TaskPlanner::shutdownRobot() {
-// }
-

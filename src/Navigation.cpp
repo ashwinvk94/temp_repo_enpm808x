@@ -27,7 +27,8 @@
  * @author      Abhinav Modi
  * @copyright   MIT License (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam 
  * @date        Dec 1, 2019
- * @brief       Function Declaration for Navigation Class
+ * @brief       Source file for Navigation Module which contains definitions of methods 
+ *              for localization and movement of the robot through the world.
  */
 
 #include <iostream>
@@ -46,13 +47,19 @@ Navigation::Navigation() {
     initializeServiceServers();
 }
 
+Navigation::~Navigation(){
+} 
+
 void Navigation::initializeServiceServers() {
+    // define service handler for the moveT service
     server = handler.advertiseService("/knd/moveTo", &Navigation::moveToSrv, this);
     ROS_INFO_STREAM("Running Service");
-    ros::spin();
+    ros::spinOnce();
 }
 
 void Navigation::setGoal(const geometry_msgs::PoseStamped& goalPose) {
+    // set goal pose to the new received target position in the world 
+    // coordinate frame
     goal.target_pose.header.frame_id = "map";
     goal.target_pose.header.stamp = ros::Time::now();
 
@@ -65,11 +72,17 @@ void Navigation::setGoal(const geometry_msgs::PoseStamped& goalPose) {
     goal.target_pose.pose.orientation.w = goalPose.pose.orientation.w;
 }
 
+move_base_msgs::MoveBaseGoal Navigation::getGoal() {
+    // provide access to private member goal
+    return this->goal;
+}
+
 bool Navigation::moveToSrv(kids_next_door::moveTo::Request& req,
                            kids_next_door::moveTo::Response& resp) {
     typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
   
   	MoveBaseClient ac("/move_base", true);
+    // initialize action lib server to start planning and moving towards goal
     while(!ac.waitForServer(ros::Duration(5.0))) {
         ROS_INFO_STREAM("Waiting for the action server to come up");
     }
@@ -77,6 +90,7 @@ bool Navigation::moveToSrv(kids_next_door::moveTo::Request& req,
     geometry_msgs::PoseStamped goalPose = req.goalPose;
     setGoal(goalPose);
     ROS_INFO_STREAM("Sending goal");
+    // send new goal to actionlib server
     ac.sendGoal(goal);
     ac.waitForResult();
     std_msgs::Bool reachedTarget;
@@ -90,4 +104,3 @@ bool Navigation::moveToSrv(kids_next_door::moveTo::Request& req,
     resp.reachedGoal = reachedTarget;
     return true;
 }
-

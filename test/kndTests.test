@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+	<node pkg="kids_next_door" name="Navigation" type="Navigation" />
+	<test pkg="kids_next_door" test-name="test1" type="test1" />
+</launch>
