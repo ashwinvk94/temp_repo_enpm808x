@@ -224,6 +224,7 @@ if(CATKIN_ENABLE_TESTING)
                 test/NavigationTest.cpp 
                 test/ToyDetectionTest.cpp
                 test/TaskPlannerTest.cpp
+                test/UserInterfaceTest.cpp
                 src/Navigation.cpp
                 src/ToyDetection.cpp
                 src/TaskPlanner.cpp

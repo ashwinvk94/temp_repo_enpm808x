@@ -66,8 +66,7 @@ TEST(UserInterfaceClassTest, TestLookForToy) {
 
     geometry_msgs::PoseStamped test1 = ui1.getStorageLocation();
 
-    std::istringstream mockInputBuffer2("n -5 1 5 -1");
-    std::ostringstream mockOutputBuffer;
+    std::istringstream mockInputBuffer2("n -50 1 50 -1");
     UserInterface ui2(mockInputBuffer2, mockOutputBuffer);
 
     geometry_msgs::PoseStamped test2 = ui2.getStorageLocation();
@@ -80,6 +79,8 @@ TEST(UserInterfaceClassTest, TestLookForToy) {
     ASSERT_EQ(test1.pose.orientation.z, 0);
     ASSERT_EQ(test1.pose.orientation.w, 1.0);
 
+    std::cout << test2.pose.position.x;
+    std::cout << test2.pose.position.y;
     ASSERT_EQ(test2.pose.position.x, 1);
     ASSERT_EQ(test2.pose.position.y, -1);
     ASSERT_EQ(test2.pose.position.z, 0);

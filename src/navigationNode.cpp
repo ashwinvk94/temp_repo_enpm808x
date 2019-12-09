@@ -42,6 +42,6 @@ int main(int argc, char** argv){
 	
 	Navigation nav;
 	ROS_INFO_STREAM("Spinning");
-	
+	ros::spin();
 	return 0;
 }

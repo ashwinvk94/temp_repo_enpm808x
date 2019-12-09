@@ -69,7 +69,7 @@ geometry_msgs::PoseStamped UserInterface::getStorageLocation() {
             while (xPosFlag) {
                 outputStream << "Enter position in x-coordinate between (-4,4) : ";
                 inputStream >> x;
-                if ((x <= 4.0) || (x >= -4.0)) {
+                if ((x <= 4.0) && (x >= -4.0)) {
                     storageLocation.pose.position.x = x;
                     xPosFlag = false;
                 }
@@ -77,7 +77,7 @@ geometry_msgs::PoseStamped UserInterface::getStorageLocation() {
             while (yPosFlag) {
                 outputStream << "Enter position in y-coordinate between (-11,1) : ";
                 inputStream >> y;
-                if ((y <= 1.0) || (y >= -11.0)) {
+                if ((y <= 1.0) && (y >= -11.0)) {
                     storageLocation.pose.position.y = y;
                     yPosFlag = false;
                 }

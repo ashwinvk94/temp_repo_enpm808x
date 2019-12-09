@@ -40,7 +40,7 @@ TEST(NavigationClassTest, TestMoveToService) {
     // create node handle object
     ros::NodeHandle n;
     ros::ServiceClient goalPoseClient = n.serviceClient<kids_next_door::moveTo>("/knd/moveTo");
-    bool exists = goalPoseClient.waitForExistence(ros::Duration(5));
+    bool exists = goalPoseClient.waitForExistence(ros::Duration(15));
     ASSERT_TRUE(exists);
 }
 
