@@ -30,9 +30,18 @@
  * @brief       Function definition for class TaskPlanner
  */
 
-#include <iterator>
+#include <iostream>
 #include <vector>
+#include <iterator>
+#include <move_base_msgs/MoveBaseAction.h>
+#include <actionlib/client/simple_action_client.h>
 
+#include "ros/ros.h"
+#include "../include/ROSModule.hpp"
+#include "../include/UserInterface.hpp"
+#include "geometry_msgs/PoseStamped.h"
+#include "kids_next_door/moveTo.h"
+#include "kids_next_door/toyFound.h"
 #include "../include/TaskPlanner.hpp"
 
 TaskPlanner::TaskPlanner() {
@@ -42,8 +51,11 @@ TaskPlanner::TaskPlanner() {
         ROS_FATAL_STREAM("ROS node is not running.");
     }
 
-    toyIDs.push_back(0);
-    toyIDs.push_back(1);
+    /* Initialize ist of toy IDs */
+    toyIDs = ui.getIDs();
+
+    /* Initialie storage location */
+    storagePose = ui.getStorageLocation();
 
     /* List of trajectory points for search */
     geometry_msgs::PoseStamped temp;
@@ -63,33 +75,6 @@ TaskPlanner::~TaskPlanner() {
 
 }
 
-// void TaskPlanner::initializePublishers() {
-//     ROS_INFO_STREAM("Initializing Publishers...");
-
-//     /* Publisher for toy ID lookup */
-//     toyIDPub = nh.advertise<std_msgs::Int32>("/knd/toyID", 1, true);
-
-//     /* Publisher for desired robot pose */
-//     goalPosePub = nh.advertise<geometric_msgs::PoseStamped>
-//                     ("/knd/goalPose", 1, true);
-// }
-
-// void TaskPlanner::initializeSubscribers() {
-//     ROS_INFO_STREAM("Initializing Subscribers...");
-
-//     /* Subscriber for checking toy visibility */
-//     toyFoundSub = nh.subscribe("/knd/toyFoundFlag", 1,
-//                     &TaskPlanner::toyFoundCallback, this);
-
-//     /* Subscriber for current robot pose */
-//     currPoseSub = nh.subscribe("/knd/currPose", 1,
-//                     &TaskPlanner::currPoseCallback, this);
-
-//     /* Subscriber for current toy pose */
-//     toyPoseSub = nh.subscribe("/knd/toyPose", 1,
-//                     &TaskPlanner::toyPoseCallback, this);
-// }
-
 void TaskPlanner::initializeServiceClients() {
     ROS_INFO_STREAM("Initializing Service Clients...");
 
@@ -103,10 +88,6 @@ void TaskPlanner::initializeServiceClients() {
 
     /* Client for picking up block */
 }
-
-// void TaskPlanner::explore() {
-
-// }
 
 int TaskPlanner::search(geometry_msgs::PoseStamped searchPose) {
     ROS_INFO_STREAM("Searching for toys");
@@ -124,27 +105,28 @@ int TaskPlanner::search(geometry_msgs::PoseStamped searchPose) {
     }
 }
 
-// bool TaskPlanner::inRangeCheck() {
-
-// }
-
-// void TaskPlanner::addNewTask(int taskID, std::string taskName) {
-
-// }
-
-// int TaskPlanner::currTask() {
-
-// }
+int TaskPlanner::moveToPose(geometry_msgs::PoseStamped pose) {
+    kids_next_door::moveTo srv;
+    srv.request.goalPose = pose;
+    if (goalPoseClient.call(srv)) {
+        if (srv.response.reachedGoal.data) {
+            return 1;
+        } else {
+            return 0;
+        }
+    } else {
+        ROS_INFO_STREAM("Failed to call moveTo service.");
+        return -1;
+    }
+}
 
 void TaskPlanner::taskPlanner() {
     /* Create iterator for toy IDs */
     std::vector<int>::iterator currToyID = toyIDs.begin();
 
     /* Create iterator for search positions */
-    std::vector<geometry_msgs::PoseStamped>::iterator currSearchPose = searchPoses.begin();
-
-    // /* Set node rate */
-    // ros::Rate loopRate(nodeHz);
+    std::vector<geometry_msgs::PoseStamped>::iterator
+                        currSearchPose = searchPoses.begin();
 
     int reachedToyFlag = 0;
     int pickedToyFlag = 0;
@@ -157,6 +139,7 @@ void TaskPlanner::taskPlanner() {
         if (cleanupFlag == 0) {
             /* If toy hasn't been reached */
             if (reachedToyFlag == 0) {
+                ROS_INFO_STREAM("Looking for toy with ID : " << *currToyID);
                 if (lookForToy(*currToyID) == 1) {   // Look for toy
                     ROS_INFO_STREAM("Found toy with ID : " << *currToyID);
                     reachedToyFlag = goToToy();

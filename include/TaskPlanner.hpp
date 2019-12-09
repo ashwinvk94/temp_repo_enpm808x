@@ -36,12 +36,13 @@
 
 #include <iostream>
 #include <vector>
+#include <iterator>
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include "ros/ros.h"
 #include "../include/ROSModule.hpp"
+#include "../include/UserInterface.hpp"
 #include "geometry_msgs/PoseStamped.h"
-#include "geometry_msgs/Pose.h"
 #include "kids_next_door/moveTo.h"
 #include "kids_next_door/toyFound.h"
 
@@ -74,6 +75,17 @@ class TaskPlanner : public ROSModule {
      * @return None
      */
     void initializeServiceClients();
+
+    /**
+     * @brief Calls service to move Tiago Base to given position
+     *
+     * @param pose The goal position robot is to be moved to
+     *
+     * @return Int with function execution status. -1 for call failure,
+     *         0 when call is successful but position not reachable,
+     *         1 when position is reached
+     */
+    int moveToPose(geometry_msgs::PoseStamped pose);
 
     /**
      * @brief Calls service to look for ArUco markers on toys
@@ -150,39 +162,6 @@ class TaskPlanner : public ROSModule {
      */
     void shutdownRobot();
 
-
-
-//   /**
-//    * @brief inRangeCheck method checks if the toy object is in a reachable range
-//    *        for the manipulator 
-//    *
-//    * @param None
-//    *
-//    * @return bool Returns true if the toy object is in range otherwise false
-//    */
-//   bool inRangeCheck();
-
-//   /**
-//    * @brief Method to add a new task to the planner 
-//    *
-//    * @param taskID  Integer id for the new task
-//    *
-//    * @param taskName  Definition of the new task 
-//    *
-//    * @return None
-//    */
-//   void addNewTask(int taskID, std::string taskName);
-
-//   /**
-//    * @brief currTask outputs the integer index of the current task being 
-//    *        performed by the robot 
-//    *
-//    * @param None
-//    *
-//    * @return int Integer ID of the task
-//    */
-//   int currTask();
-
     /**
      * @brief Main method which switches from the current task to the next one 
      *        based on feedback from the robot.
@@ -194,32 +173,30 @@ class TaskPlanner : public ROSModule {
     void taskPlanner();
 
   private :
-    /**
-     * @brief map object which contains the list of tasks to be performed
-     *        by the robot indexed by an integer key for each task.
-     */
+    /* Map object which contains the list of tasks to be performed
+     *        by the robot indexed by an integer key for each task */
     std::map<int, std::string> taskList; 
 
-    /**
-     * @brief 2D grid map of the world for navigation purposes
-     */
-    // cv::Mat map; 
-
-    /**
-     * @brief List of ArUco tag IDs to be picked
-     */
+    /* List of ArUco tag IDs to be picked */
     std::vector<int> toyIDs; 
 
     /* Create ROS node handle */
     ros::NodeHandle nh;
 
+    /* Current pose of toy */
     geometry_msgs::PoseStamped toyPose;
 
+    /* Pose of storge location */
     geometry_msgs::PoseStamped storagePose;
 
+    /* List of way-points to traverse for exploration */
     std::vector<geometry_msgs::PoseStamped> searchPoses;
 
+    /* Service Clients */
     ros::ServiceClient toyFoundClient, goalPoseClient;
+
+    /* User Iterface object for getting input */
+    UserInterface ui;
 };
 
 #endif  // INCLUDE_TASKPLANNER_HPP_
