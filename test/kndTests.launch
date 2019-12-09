@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="kids_next_door" type="navigation" name="navigation"  />
+	<test pkg="kids_next_door" test-name="kndTest" type="kndTest" />
+</launch>

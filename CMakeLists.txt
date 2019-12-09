@@ -8,12 +8,12 @@ project(kids_next_door)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  genmsg
-  message_generation
+  roscpp
   actionlib
   move_base_msgs
   geometry_msgs
-  roscpp
+  genmsg
+  message_generation
   tf
 )
 
@@ -106,9 +106,10 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-# INCLUDE_DIRS include
-# LIBRARIES kids_next_door
+#INCLUDE_DIRS include
+#LIBRARIES kids_next_door
  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs
+# CATKIN_DEPENDS message_runtime
 # DEPENDS system_lib
 )
 
@@ -120,6 +121,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 	include
+ # ${Boost_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -131,7 +133,6 @@ include_directories(
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
@@ -140,9 +141,10 @@ include_directories(
 
 add_executable(Navigation src/Navigation.cpp)
 target_link_libraries(Navigation ${catkin_LIBRARIES})
-
 add_executable(ToyDetection src/ToyDetection.cpp)
 target_link_libraries(ToyDetection ${catkin_LIBRARIES})
+#add_dependencies(kids_next_door kids_next_door_generate_messages_cpp)
+
 
 #add_executable(test_move_base src/test_move_base.cpp)
 #target_link_libraries(test_move_base ${catkin_LIBRARIES})

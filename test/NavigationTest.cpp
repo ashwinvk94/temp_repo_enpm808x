@@ -31,7 +31,7 @@
  */
 
 #include <gtest/gtest.h>
-
+#include <ros/ros.h>
 #include "Navigation.hpp"
 
 /**
@@ -42,7 +42,11 @@
  * @return none
  */
 TEST(NavigationClassTest, TestMoveToService) {
-    
+    // create node handle object 
+    ros::NodeHandle n;
+    auto testClient = n.ServiceClient<Navigation::moveToSrv>("/knd/moveTo");
+    bool exists(testClient.waitForExistence(ros::Duration(5)));
+    EXPECT_TRUE(exists);
 }
 
 /**
@@ -54,4 +58,10 @@ TEST(NavigationClassTest, TestMoveToService) {
  */
 TEST(NavigationClassTest, TestLocalizeCb) {
 
+}
+
+int main(int argc, char ** argv) {
+	::testing::InitGoogleTest(&argc, argv);
+	ros::init(argc, argv, "kndTest");
+	return RUN_ALL_TESTS();
 }
