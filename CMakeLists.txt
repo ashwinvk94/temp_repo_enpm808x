@@ -226,7 +226,8 @@ if(CATKIN_ENABLE_TESTING)
                 test/TaskPlannerTest.cpp
                 src/Navigation.cpp
                 src/ToyDetection.cpp
-                src/TaskPlanner.cpp)
+                src/TaskPlanner.cpp
+                src/UserInterface.cpp)
   target_link_libraries(test1 ${catkin_LIBRARIES})
 #  add_dependencies(kndTest ${catkin_EXPORTED_TARGETS})
 endif()

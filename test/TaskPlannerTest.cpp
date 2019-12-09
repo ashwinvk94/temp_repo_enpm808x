@@ -34,6 +34,7 @@
 #include <sstream>
 
 #include "../include/TaskPlanner.hpp"
+#include "../include/UserInterface.hpp"
 #include "ros/ros.h"
 #include "ros/service_client.h"
 
