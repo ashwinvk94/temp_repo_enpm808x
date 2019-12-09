@@ -89,7 +89,7 @@ before_install:
   - sudo apt-get install ros-$ROS_DISTRO-python-qt-binding --allow-unauthenticated
   - sudo -H apt-get install -y ros-$ROS_DISTRO-urdf-geometry-parser --allow-unauthenticated
   - sudo -H apt-get install -y ros-$ROS_DISTRO-humanoid-nav-msgs --allow-unauthenticated
-    - sudo -H apt-get install -y ros-kinetic-carrot-planner --allow-unauthenticated
+  - sudo -H apt-get install -y ros-kinetic-carrot-planner --allow-unauthenticated
   # - sudo -H ros-kinetic-control-msgs ros-kinetic-control-toolbox --allow-unauthenticated
   # - sudo -H ros-kinetic-kdl-conversions ros-kinetic-orocos-kdl --allow-unauthenticated
   # - sudo -H ros-kinetic-python-orocos-kdl ros-kinetic-realtime-tools --allow-unauthenticated
