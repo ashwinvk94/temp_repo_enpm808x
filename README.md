@@ -23,3 +23,22 @@ __Ashwin Varghese Kuruttukulam__: I am in my third semester of M.Eng. in Robotic
 [![Packagist](https://img.shields.io/badge/AIP-Sprint-brightgreen)](https://docs.google.com/document/d/1S4FX_vaaVi4O-uJQCASvIETeV3dRj0eVRvi1tA0-r3A/edit?usp=sharing)
 
 The Agile Iterative Process was followed for the development of the software. Follow this Google Sheets [link](https://docs.google.com/spreadsheets/d/1EpZC6qNrfh5d6ULUvAsA_EainnZeKeKZD43DMa95FU4/edit?usp=sharing) to view the product backlog and sprint schedules. Follow this Google Docs [link](https://docs.google.com/document/d/1S4FX_vaaVi4O-uJQCASvIETeV3dRj0eVRvi1tA0-r3A/edit?usp=sharing) to view Sprint notes.
+
+## Building the package
+To build this package follow the steps below:
+```
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src
+git clone --recursive https://github.com/rohansingh42/kids_next_door
+cd ..
+<rohan add extra data instructions>
+catkin_make
+source devel/setup.bash
+```
+
+## Running the simulation demo
+Once the build is complete successfully and you have sourced the bash file, you can run it using roslaunch:
+```
+roslaunch kids_next_door combined.launch
+```
+
