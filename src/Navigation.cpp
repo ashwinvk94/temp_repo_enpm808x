@@ -1,18 +1,55 @@
+/******************************************************************************
+ *  MIT License
+ *
+ *  Copyright (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam 
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *******************************************************************************/
+
+/**
+ * @file        Navigation.cpp
+ * @author      Abhinav Modi
+ * @copyright   MIT License (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam 
+ * @date        Dec 1, 2019
+ * @brief       Source file for Navigation Module which contains definitions of methods 
+ *              for localization and movement of the robot through the world.
+ */
+
 #include "../include/Navigation.hpp"
 
 Navigation::Navigation() {
     initializeServiceServers();
 }
+
 Navigation::~Navigation(){
-}
+} 
 
 void Navigation::initializeServiceServers() {
+    // define service handler for the moveT service
     server = handler.advertiseService("/knd/moveTo", &Navigation::moveToSrv, this);
     ROS_INFO_STREAM("Running Service");
     ros::spinOnce();
 }
 
 void Navigation::setGoal(const geometry_msgs::PoseStamped& goalPose) {
+    // set goal pose to the new received target position in the world 
+    // coordinate frame
     goal.target_pose.header.frame_id = "map";
     goal.target_pose.header.stamp = ros::Time::now();
 
@@ -26,6 +63,7 @@ void Navigation::setGoal(const geometry_msgs::PoseStamped& goalPose) {
 }
 
 move_base_msgs::MoveBaseGoal Navigation::getGoal() {
+    // provide access to private member goal
     return this->goal;
 }
 
@@ -34,6 +72,7 @@ bool Navigation::moveToSrv(kids_next_door::moveTo::Request& req,
     typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
   
   	MoveBaseClient ac("/move_base", true);
+    // initialize action lib server to start planning and moving towards goal
     while(!ac.waitForServer(ros::Duration(5.0))) {
         ROS_INFO_STREAM("Waiting for the action server to come up");
     }
@@ -41,6 +80,7 @@ bool Navigation::moveToSrv(kids_next_door::moveTo::Request& req,
     geometry_msgs::PoseStamped goalPose = req.goalPose;
     setGoal(goalPose);
     ROS_INFO_STREAM("Sending goal");
+    // send new goal to actionlib server
     ac.sendGoal(goal);
     ac.waitForResult();
     std_msgs::Bool reachedTarget;
@@ -54,19 +94,3 @@ bool Navigation::moveToSrv(kids_next_door::moveTo::Request& req,
     resp.reachedGoal = reachedTarget;
     return true;
 }
-
-// int main(int argc, char** argv){
-// 	ros::init(argc, argv, "navigation"); //node name
-
-// 	ros::NodeHandle nh; // create a node handle; need to pass this to the class constructor
-
-// 	ROS_INFO_STREAM("Started navigation node");
-
-	
-// 	// ROSModule * nav =  new Navigation();
-//     Navigation nav;
-// 	ROS_INFO_STREAM("Spinning");
-	
-	
-// 	return 0;
-// };

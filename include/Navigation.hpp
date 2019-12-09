@@ -51,29 +51,51 @@ class Navigation {
   Navigation();
 
   /**
-   * @brief Method for publishing goal positions for the motion robot base
-   *        through the environment  
+   * @brief Service server which gets new target pose in request
+   *        and starts moving towards it. It returns true/false once
+   *        the service call is completed.       
    *
-   * @param pos The desired pose the robot has to be moved to.
+   * @param req - service request object of new target Pose 
+   * @param resp - service response object of completed action
    *
-   * @return None
+   * @return bool - true when the service is completed
    */
 
   bool moveToSrv(kids_next_door::moveTo::Request& req, 
                  kids_next_door::moveTo::Response& resp);
   /**
-   * @brief Method for getting current pose of the robot
+   * @brief Method for initializinig service servers
    *
    * @param None
    *
-   * @return Returns variable currPos
+   * @return None
    */
-  // void initializeSubscribers();
+  void initializeServiceServers();\
 
-  void initializeServiceServers();
+  /**
+   * @brief Method to set new goal position
+   *
+   * @param goalPose - const reference to new goal position 
+   *
+   * @return None
+   */
   void setGoal(const geometry_msgs::PoseStamped& goalPose);
+
+  /**
+   * @brief Method for accessing the private member goalPose
+   *
+   * @param None
+   *
+   * @return move_base_msgs::MoveBaseGoal - access to data member goalPose 
+   */
   move_base_msgs::MoveBaseGoal getGoal();
+
+    
+  /**
+   * @brief Default Destructor for navigation class
+   */    
   ~Navigation();
+
  private :
   /**
    * @brief pose of the target in the robot's body frame   
@@ -81,10 +103,13 @@ class Navigation {
   move_base_msgs::MoveBaseGoal goal;
 
   /**
-   * @brief pose of the target in the robot's body frame   
+   * @brief Node handler object for navigation node   
    */
   ros::NodeHandle handler;
 
+  /**
+   * @brief Service server object for moveTo service   
+   */  
   ros::ServiceServer server;
 
 };
