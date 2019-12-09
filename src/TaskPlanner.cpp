@@ -146,6 +146,8 @@ int TaskPlanner::taskPlanner() {
     int reachedStorgeFlag = 0;
     int storedToyFlag = 0;
     int cleanupFlag = 0;
+    int toyFoundFlag = 0;
+    int failCount = 0;
     storagePose.pose.orientation.w = 1;
 
     while (ros::ok()) {
@@ -154,7 +156,8 @@ int TaskPlanner::taskPlanner() {
             /* If toy hasn't been reached */
             if (reachedToyFlag == 0) {
                 ROS_INFO_STREAM("Looking for toy with ID : " << *currToyID);
-                if (lookForToy(*currToyID) == 1) {   // Look for toy
+                toyFoundFlag = lookForToy(*currToyID);
+                if (toyFoundFlag == 1) {   // Look for toy
                     ROS_INFO_STREAM("Found toy with ID : " << *currToyID);
                     reachedToyFlag = moveToPose(toyPose);
                 } else {        // Search if can't see toy
@@ -201,6 +204,19 @@ int TaskPlanner::taskPlanner() {
                 reachedStorgeFlag = 0;
                 storedToyFlag = 0;
                 currSearchPose = searchPoses.begin();
+                toyFoundFlag = 0;
+            }
+
+            if ((toyFoundFlag == -1) || (reachedToyFlag == -1) ||
+                    (reachedStorgeFlag = -1)) {
+                ROS_INFO_STREAM("Failed to call services. Attempt no. : "
+                                << failCount);
+                failCount++;
+            }
+            
+            if (failCount == 10) {
+                ROS_INFO_STREAM("Servers could not be contacted. Giving up.");
+                break;
             }
 
             /* If all toys have been stored */

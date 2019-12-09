@@ -35,13 +35,16 @@
 #include "ToyDetection.hpp"
 
 /**
- * @brief Test to check detectArUcoCb functionality
- *
- * @param none
- *
- * @return none
+ * @brief Test to check toyFound Service
  */
-TEST(ToyDetectionClassTest, TestDetectArucoCb) {
+TEST(ToyDetectionClassTest, FindToyServiceTest) {
+	// create node handle object
+    ros::NodeHandle n;
+	ToyDetection detect;
+    ros::ServiceClient findToyClient = 
+    		n.serviceClient<kids_next_door::toyFound>("/knd/toyFound");
+    bool exists = findToyClient.waitForExistence(ros::Duration(5));
+    ASSERT_TRUE(exists);
 }
 
 /**
@@ -51,15 +54,16 @@ TEST(ToyDetectionClassTest, TestDetectArucoCb) {
  *
  * @return none
  */
-TEST(ToyDetectionClassTest, TestToyPositionPub) {
+TEST(ToyDetectionClassTest, detectArucoTest) {
+	// should return no detections found
+	ToyDetection detect;
+	int out = detect.detectArUco();
+	ASSERT_EQ(out,0);
 }
 
 /**
- * @brief Test to check camFeedCb functionality
- *
- * @param none
- *
- * @return none
+ * @brief Test to check successful initialization of the module
  */
-TEST(ToyDetectionClassTest, TestCamFeedCb) {
+TEST(ToyDetectionClassTest, SuccessfulInitialization) {
+	EXPECT_NO_FATAL_FAILURE(ToyDetection detect);
 }

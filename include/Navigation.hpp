@@ -45,7 +45,7 @@
 #include "kids_next_door/moveTo.h"
 
 
-class Navigation {
+class Navigation : public ROSModule{
  public:
 
   Navigation();
@@ -64,7 +64,7 @@ class Navigation {
   bool moveToSrv(kids_next_door::moveTo::Request& req, 
                  kids_next_door::moveTo::Response& resp);
   /**
-   * @brief Method for initializinig service servers
+   * @brief Method for initializinig service servers inherited from the ROSModule
    *
    * @param None
    *

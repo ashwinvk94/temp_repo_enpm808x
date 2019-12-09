@@ -220,8 +220,11 @@ add_dependencies(TaskPlanner ${${PROJECT_NAME}_EXPORTED_TARGETS})
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
   add_rostest_gtest(test1 test/kndTests.test
-                test/NavigationTest.cpp
-                src/Navigation.cpp)
+                test/main.cpp
+                test/NavigationTest.cpp 
+                test/ToyDetectionTest.cpp
+                src/Navigation.cpp
+                src/ToyDetection.cpp)
   target_link_libraries(test1 ${catkin_LIBRARIES})
 #  add_dependencies(kndTest ${catkin_EXPORTED_TARGETS})
 endif()

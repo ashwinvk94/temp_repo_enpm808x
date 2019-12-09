@@ -62,6 +62,8 @@ class ToyDetection : public ROSModule {
    *
    * @return None
    */
+
+  void initializeServiceServers();
   int detectArUco();
 
   /**
@@ -81,6 +83,8 @@ class ToyDetection : public ROSModule {
     
     /* tf listener to get value of transforms in tf */
     tf::TransformListener listener;
+    ros::ServiceServer server;
+    ros::Subscriber arucoSub;
     
     /* tf tranform to store the transform */
     tf::StampedTransform transform;
