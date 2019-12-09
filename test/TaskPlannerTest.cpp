@@ -44,6 +44,56 @@
 TEST(TaskPlannerClassTest, TestSearch) {
 }
 
+// /**
+//  * @brief Test to check inRangeCheck functionality
+//  *
+//  * @param none
+//  *
+//  * @return none
+//  */
+// TEST(TaskPlannerClassTest, TestInRangeCheck) {
+// }
+
+// /**
+//  * @brief Test to check addNewTask functionality
+//  *
+//  * @param none
+//  *
+//  * @return none
+//  */
+// TEST(TaskPlannerClassTest, TestAddNewTask) {
+// }
+
+// /**
+//  * @brief Test to check currTask functionality
+//  *
+//  * @param none
+//  *
+//  * @return none
+//  */
+// TEST(TaskPlannerClassTest, TestCurrTask) {
+// }
+
+/**
+ * @brief Test to check lookForToy functionality
+ *
+ * @param none
+ *
+ * @return none
+ */
+TEST(TaskPlannerClassTest, TestLookForToy) {
+}
+
+/**
+ * @brief Test to check goToToy functionality
+ *
+ * @param none
+ *
+ * @return none
+ */
+TEST(TaskPlannerClassTest, TestGoToToy) {
+}
+
 /**
  * @brief Test to check inRangeCheck functionality
  *
@@ -55,23 +105,33 @@ TEST(TaskPlannerClassTest, TestInRangeCheck) {
 }
 
 /**
- * @brief Test to check addNewTask functionality
+ * @brief Test to check inRangeCheck functionality
  *
  * @param none
  *
  * @return none
  */
-TEST(TaskPlannerClassTest, TestAddNewTask) {
+TEST(TaskPlannerClassTest, TestInRangeCheck) {
 }
 
 /**
- * @brief Test to check currTask functionality
+ * @brief Test to check inRangeCheck functionality
  *
  * @param none
  *
  * @return none
  */
-TEST(TaskPlannerClassTest, TestCurrTask) {
+TEST(TaskPlannerClassTest, TestInRangeCheck) {
+}
+
+/**
+ * @brief Test to check inRangeCheck functionality
+ *
+ * @param none
+ *
+ * @return none
+ */
+TEST(TaskPlannerClassTest, TestInRangeCheck) {
 }
 
 /**
