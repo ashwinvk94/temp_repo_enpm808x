@@ -49,6 +49,17 @@ TEST(NavigationClassTest, TestMoveToService) {
     bool exists = goalPoseClient.waitForExistence(ros::Duration(5));
     ASSERT_TRUE(exists);
 }
+TEST(NavigationClassTest, TestSetGoalMethod) {
+	Navigation nav;
+	// generate a random goal pose
+	geometry_msgs::PoseStamped randomPose;
+	randomPose.pose.position.x = 1.0;
+	randomPose.pose.orientation.w = 1.0;
+	nav.setGoal(randomPose);
+	move_base_msgs::MoveBaseGoal goalPose = nav.getGoal();
+	ASSERT_EQ(goalPose.target_pose.pose.position.x, randomPose.pose.position.x);
+	ASSERT_EQ(goalPose.target_pose.pose.orientation.w, randomPose.pose.orientation.w);
+}
 
 /**
  * @brief Test to check localizeCb functionality

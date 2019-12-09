@@ -72,6 +72,7 @@ class Navigation {
 
   void initializeServiceServers();
   void setGoal(const geometry_msgs::PoseStamped& goalPose);
+  move_base_msgs::MoveBaseGoal getGoal();
   ~Navigation();
  private :
   /**

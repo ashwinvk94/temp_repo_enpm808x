@@ -7,6 +7,7 @@ int main(int argc, char** argv){
 	
 	// ROSModule * nav =  new Navigation();
     Navigation nav;
+    ros::spin();
 	ROS_INFO_STREAM("Spinning");
 
 	return 0;

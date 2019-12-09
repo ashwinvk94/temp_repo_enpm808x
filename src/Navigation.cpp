@@ -9,7 +9,7 @@ Navigation::~Navigation(){
 void Navigation::initializeServiceServers() {
     server = handler.advertiseService("/knd/moveTo", &Navigation::moveToSrv, this);
     ROS_INFO_STREAM("Running Service");
-    ros::spin();
+    ros::spinOnce();
 }
 
 void Navigation::setGoal(const geometry_msgs::PoseStamped& goalPose) {
@@ -23,6 +23,10 @@ void Navigation::setGoal(const geometry_msgs::PoseStamped& goalPose) {
     goal.target_pose.pose.orientation.y = goalPose.pose.orientation.y;
     goal.target_pose.pose.orientation.z = goalPose.pose.orientation.z;
     goal.target_pose.pose.orientation.w = goalPose.pose.orientation.w;
+}
+
+move_base_msgs::MoveBaseGoal Navigation::getGoal() {
+    return this->goal;
 }
 
 bool Navigation::moveToSrv(kids_next_door::moveTo::Request& req,
