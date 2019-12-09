@@ -45,7 +45,7 @@
 #include "kids_next_door/moveTo.h"
 
 
-class Navigation : public ROSModule {
+class Navigation {
  public:
 
   Navigation();
@@ -72,6 +72,7 @@ class Navigation : public ROSModule {
 
   void initializeServiceServers();
   void setGoal(const geometry_msgs::PoseStamped& goalPose);
+  ~Navigation();
  private :
   /**
    * @brief pose of the target in the robot's body frame   

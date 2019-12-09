@@ -3,6 +3,8 @@
 Navigation::Navigation() {
     initializeServiceServers();
 }
+Navigation::~Navigation(){
+}
 
 void Navigation::initializeServiceServers() {
     server = handler.advertiseService("/knd/moveTo", &Navigation::moveToSrv, this);
@@ -57,7 +59,8 @@ int main(int argc, char** argv){
 	ROS_INFO_STREAM("Started navigation node");
 
 	
-	ROSModule * nav =  new Navigation();
+	// ROSModule * nav =  new Navigation();
+    Navigation nav;
 	ROS_INFO_STREAM("Spinning");
 	
 	

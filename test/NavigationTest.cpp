@@ -31,8 +31,8 @@
  */
 
 #include <gtest/gtest.h>
-#include <ros/ros.h>
-#include "Navigation.hpp"
+// #include "../include/Navigation.hpp"
+#include "../include/Navigation.hpp"
 
 /**
  * @brief Test to check moveBasePub functionality
@@ -42,10 +42,12 @@
  * @return none
  */
 TEST(NavigationClassTest, TestMoveToService) {
-    // create node handle object 
+    Navigation nav;
+    // create node handle object
     ros::NodeHandle n;
-    auto testClient = n.ServiceClient<Navigation::moveToSrv>("/knd/moveTo");
-    bool exists(testClient.waitForExistence(ros::Duration(5)));
+    ros::ServiceClient goalPoseClient = n.serviceClient<kids_next_door::moveTo>(
+                    "/knd/moveTo");
+    bool exists = goalPoseClient.waitForExistence(ros::Duration(5));
     EXPECT_TRUE(exists);
 }
 
@@ -64,4 +66,4 @@ int main(int argc, char ** argv) {
 	::testing::InitGoogleTest(&argc, argv);
 	ros::init(argc, argv, "kndTest");
 	return RUN_ALL_TESTS();
-}
+};
