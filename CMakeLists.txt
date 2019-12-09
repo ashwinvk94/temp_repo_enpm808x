@@ -143,6 +143,8 @@ add_executable(Navigation src/Navigation.cpp)
 target_link_libraries(Navigation ${catkin_LIBRARIES})
 add_executable(ToyDetection src/ToyDetection.cpp)
 target_link_libraries(ToyDetection ${catkin_LIBRARIES})
+add_executable(TaskPlanner src/TaskPlanner.cpp)
+target_link_libraries(TaskPlanner ${catkin_LIBRARIES})
 #add_dependencies(kids_next_door kids_next_door_generate_messages_cpp)
 
 

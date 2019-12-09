@@ -41,8 +41,6 @@ TaskPlanner::TaskPlanner() {
     if (!ros::ok()) {
         ROS_FATAL_STREAM("ROS node is not running.");
     }
-    /* Create ROS node handle */
-    ros::NodeHandle nh;
 
     toyIDs.push_back(0);
     toyIDs.push_back(1);
@@ -50,18 +48,18 @@ TaskPlanner::TaskPlanner() {
     /* List of trajectory points for search */
     geometry_msgs::PoseStamped temp;
     temp.pose.position.x = 0;
-    temp.pose.position.y = -8;
+    temp.pose.position.y = -7;
     temp.pose.position.z = 0;
     temp.pose.orientation.x = 0;
     temp.pose.orientation.y = 0;
-    temp.pose.orientation.z = 0.7071;
+    temp.pose.orientation.z = -0.7071;
     temp.pose.orientation.w = 0.7071;
     searchPoses.push_back(temp);
 
     initializeServiceClients();
 }
 
-~TaskPlanner::TaskPlanner() {
+TaskPlanner::~TaskPlanner() {
 
 }
 
@@ -96,12 +94,12 @@ void TaskPlanner::initializeServiceClients() {
     ROS_INFO_STREAM("Initializing Service Clients...");
 
     /* Client for checking toy visibility */
-    toyFoundClient = nh.serviceClient<kid_next_door::toyFound>(
-                    "/knd/toyFoundService");
+    toyFoundClient = nh.serviceClient<kids_next_door::toyFound>(
+                    "/knd/toyFound");
 
     /* Client for setting robot goal pose */
     goalPoseClient = nh.serviceClient<kids_next_door::moveTo>(
-                    "/knd/goalPose");
+                    "/knd/moveTo");
 
     /* Client for picking up block */
 }
@@ -111,10 +109,11 @@ void TaskPlanner::initializeServiceClients() {
 // }
 
 int TaskPlanner::search(geometry_msgs::PoseStamped searchPose) {
+    ROS_INFO_STREAM("Searching for toys");
     kids_next_door::moveTo srv;
-    srv.request.goal = searchPose;
+    srv.request.goalPose = searchPose;
     if (goalPoseClient.call(srv)) {
-        if (srv.response.goalReachedFlag) {
+        if (srv.response.reachedGoal.data) {
             return 1;
         } else {
             return 0;
@@ -142,10 +141,10 @@ void TaskPlanner::taskPlanner() {
     std::vector<int>::iterator currToyID = toyIDs.begin();
 
     /* Create iterator for search positions */
-    std::vector<int>::iterator currSearchPose = searchPoses.begin();
+    std::vector<geometry_msgs::PoseStamped>::iterator currSearchPose = searchPoses.begin();
 
-    /* Set node rate */
-    ros::Rate loopRate(nodeHz);
+    // /* Set node rate */
+    // ros::Rate loopRate(nodeHz);
 
     int reachedToyFlag = 0;
     int pickedToyFlag = 0;
@@ -159,17 +158,15 @@ void TaskPlanner::taskPlanner() {
             /* If toy hasn't been reached */
             if (reachedToyFlag == 0) {
                 if (lookForToy(*currToyID) == 1) {   // Look for toy
-                    ROS_INFO_STREAM("Found for toy with ID : " << *currToyID);
+                    ROS_INFO_STREAM("Found toy with ID : " << *currToyID);
                     reachedToyFlag = goToToy();
                 } else {        // Search if can't see toy
-                    ROS_INFO_STREAM("Looking for toy with ID : "
-                                    << *currToyID);
-                    if (currSearch == searchPoses.end()) {
+                    if (currSearchPose == searchPoses.end()) {
                         /* Current ID could not be found, move to next */
-                        ROS_INFO_STREAM("Current ID could not be found,
-                                             moving to next.");
+                        ROS_INFO_STREAM("Current ID could not be" <<
+                                         "found, moving to next.");
                         storedToyFlag = 1;
-                    } else if (search(*currSearchPose) != 1) {
+                    } else if (search(*currSearchPose) == 1) {
                         currSearchPose++;
                     }
                 }
@@ -221,11 +218,11 @@ void TaskPlanner::taskPlanner() {
 }
 
 int TaskPlanner::lookForToy(int toyID) {
-    kid_next_door::toyFound srv;
-    srv.request.id = toyID;
+    kids_next_door::toyFound srv;
+    srv.request.id.data= toyID;
     if (toyFoundClient.call(srv)) {
         toyPose = srv.response.toyPose;
-        if (srv.response.toyFoundFlag) {
+        if (srv.response.detection.data) {
             return 1;
         } else {
             return 0;
@@ -238,9 +235,15 @@ int TaskPlanner::lookForToy(int toyID) {
 
 int TaskPlanner::goToToy() {
     kids_next_door::moveTo srv;
-    srv.request.goal = toyPose;
+    std::cout << toyPose;
+    geometry_msgs::PoseStamped temp;
+    temp.pose.position.x = toyPose.pose.position.x;
+    temp.pose.position.y = toyPose.pose.position.y;
+    temp.pose.position.z = toyPose.pose.position.z;
+    temp.pose.orientation.w = 1.0;
+    srv.request.goalPose = temp;
     if (goalPoseClient.call(srv)) {
-        if (srv.response.goalReachedFlag) {
+        if (srv.response.reachedGoal.data) {
             return 1;
         } else {
             return 0;
@@ -257,9 +260,9 @@ int TaskPlanner::pickUpToy() {
 
 int TaskPlanner::goToStorage() {
     kids_next_door::moveTo srv;
-    srv.request.goal = storagePose;
+    srv.request.goalPose = storagePose;
     if (goalPoseClient.call(srv)) {
-        if (srv.response.goalReachedFlag) {
+        if (srv.response.reachedGoal.data) {
             return 1;
         } else {
             return 0;
@@ -286,7 +289,9 @@ int main(int argc, char** argv){
 	ROS_INFO_STREAM("Started TaskPlanner node");
 
 	
-	ROSModule * tp =  new TaskPlanner();
+	TaskPlanner tp;
+
+    tp.taskPlanner();
 	// ROS_INFO_STREAM("Spinning");
 	
 	return 0;

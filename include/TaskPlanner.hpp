@@ -43,9 +43,10 @@
 #include "geometry_msgs/PoseStamped.h"
 #include "geometry_msgs/Pose.h"
 #include "kids_next_door/moveTo.h"
+#include "kids_next_door/toyFound.h"
 
-class TaskPlanner {
- public:
+class TaskPlanner : public ROSModule {
+  public:
 
     /**
      * @brief Constructor for class
@@ -94,7 +95,7 @@ class TaskPlanner {
      *         0 when call is successful but position not reachable,
      *         1 when position is reached
      */
-    int goToToy(int toyID);
+    int goToToy();
 
     /**
      * @brief Calls service to move Tiago to Toy Storage Location
@@ -127,7 +128,7 @@ class TaskPlanner {
      *         0 when call is successful but toy could not be picked up,
      *         1 when toy is successfully picked up
      */
-    int pickUpToy(int toyID);
+    int pickUpToy();
 
     /**
      * @brief Calls service to store toy in storage
@@ -138,7 +139,7 @@ class TaskPlanner {
      *         0 when call is successful but toy could not be placed,
      *         1 when toy is successfully placed in storage
      */
-    int lookForToy(int toyID);
+    int storeToy();
 
     /**
      * @brief Shuts down ROS nodes
@@ -147,7 +148,7 @@ class TaskPlanner {
      *
      * @return None
      */
-    void shutdownRobot(int toyID);
+    void shutdownRobot();
 
 
 
@@ -202,17 +203,15 @@ class TaskPlanner {
     /**
      * @brief 2D grid map of the world for navigation purposes
      */
-    cv::Mat map; 
+    // cv::Mat map; 
 
     /**
      * @brief List of ArUco tag IDs to be picked
      */
     std::vector<int> toyIDs; 
 
-    /**
-     * @brief ROS Node frequency
-     */
-    int nodeHz = 20;
+    /* Create ROS node handle */
+    ros::NodeHandle nh;
 
     geometry_msgs::PoseStamped toyPose;
 
@@ -221,6 +220,6 @@ class TaskPlanner {
     std::vector<geometry_msgs::PoseStamped> searchPoses;
 
     ros::ServiceClient toyFoundClient, goalPoseClient;
-}
+};
 
 #endif  // INCLUDE_TASKPLANNER_HPP_
