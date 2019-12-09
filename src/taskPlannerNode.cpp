@@ -23,101 +23,28 @@
  *******************************************************************************/
 
 /**
- * @file        TaskPlannerTest.cpp
+ * @file        taskPlannerNode.cpp
  * @author      Rohan Singh
  * @copyright   MIT License (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam 
  * @date        Dec 1, 2019
- * @brief       Unit tests for class TaskPlanner
+ * @brief       ROS node for TaskPlanner Module
  */
 
-#include <gtest/gtest.h>
-#include <sstream>
+#include <iostream>
 
-#include "../include/TaskPlanner.hpp"
 #include "ros/ros.h"
-#include "ros/service_client.h"
+#include "../include/TaskPlanner.hpp"
 
-/**
- * @brief Test to main Node functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestMainNode) {
-    std::istringstream mockInputBuffer("y");
-    std::ostringstream mockOutputBuffer;
-    TaskPlanner tp(mockInputBuffer, mockOutputBuffer);
+int main(int argc, char** argv){
+	ros::init(argc, argv, "taskPlanner"); //node name
 
+	ROS_INFO_STREAM("Started TaskPlanner node");
+	
+    /* Create TaskPlanner node object */
+	TaskPlanner tp;
 
-}
-
-/**
- * @brief Test to check moveTo functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestMoveToP) {
-}
-
-/**
- * @brief Test to check goToToy functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestGoToToy) {
-}
-
-/**
- * @brief Test to check inRangeCheck functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestInRangeCheck) {
-}
-
-/**
- * @brief Test to check inRangeCheck functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestInRangeCheck) {
-}
-
-/**
- * @brief Test to check inRangeCheck functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestInRangeCheck) {
-}
-
-/**
- * @brief Test to check inRangeCheck functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestInRangeCheck) {
-}
-
-/**
- * @brief Test to check taskPlanner functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestTaskPlanner) {
+    /* Execute task planner */
+    tp.taskPlanner();
+	
+	return 0;
 }

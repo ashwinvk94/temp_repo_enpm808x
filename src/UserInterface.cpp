@@ -35,7 +35,7 @@
 
 #include "ros/ros.h"
 #include "geometry_msgs/PoseStamped.h"
-#include "../include/UserInterface.hpp"
+#include "UserInterface.hpp"
 
 UserInterface::UserInterface() :
             inputStream(std::cin), outputStream(std::cout) {}

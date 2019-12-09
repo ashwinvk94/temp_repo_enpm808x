@@ -23,11 +23,11 @@
  *******************************************************************************/
 
 /**
- * @file        TaskPlannerTest.cpp
+ * @file        UserInterfaceTest.cpp
  * @author      Rohan Singh
  * @copyright   MIT License (c) 2019 Rohan Singh, Abhinav Modi, Ashwin Kuruttukulam 
  * @date        Dec 1, 2019
- * @brief       Unit tests for class TaskPlanner
+ * @brief       Unit tests for class UserInterface
  */
 
 #include <gtest/gtest.h>
@@ -35,89 +35,56 @@
 
 #include "../include/TaskPlanner.hpp"
 #include "ros/ros.h"
-#include "ros/service_client.h"
+#include "geometry_msgs/PoseStamped.h"
+
 
 /**
- * @brief Test to main Node functionality
+ * @brief Test to check getIDs functionality
  *
- * @param none
+ * @param None
  *
  * @return none
  */
-TEST(TaskPlannerClassTest, TestMainNode) {
-    std::istringstream mockInputBuffer("y");
+TEST(UserInterfaceClassTest, TestGetIDs) {
+    UserInterface ui;
+    std::vector<int> ids = ui.getIDs();
+
+    ASSERT_EQ(9, ids.size());
+}
+
+/**
+ * @brief Test to check getStorageLocation functionality
+ *
+ * @param None
+ *
+ * @return none
+ */
+TEST(UserInterfaceClassTest, TestLookForToy) {
+    std::istringstream mockInputBuffer1("y");
     std::ostringstream mockOutputBuffer;
-    TaskPlanner tp(mockInputBuffer, mockOutputBuffer);
+    UserInterface ui1(mockInputBuffer1, mockOutputBuffer);
 
+    geometry_msgs::PoseStamped test1 = ui1.getStorageLocation();
 
-}
+    std::istringstream mockInputBuffer2("n -5 1 5 -1");
+    std::ostringstream mockOutputBuffer;
+    UserInterface ui2(mockInputBuffer2, mockOutputBuffer);
 
-/**
- * @brief Test to check moveTo functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestMoveToP) {
-}
+    geometry_msgs::PoseStamped test2 = ui2.getStorageLocation();
 
-/**
- * @brief Test to check goToToy functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestGoToToy) {
-}
+    ASSERT_EQ(test1.pose.position.x, 0);
+    ASSERT_EQ(test1.pose.position.y, 0);
+    ASSERT_EQ(test1.pose.position.z, 0);
+    ASSERT_EQ(test1.pose.orientation.x, 0);
+    ASSERT_EQ(test1.pose.orientation.y, 0);
+    ASSERT_EQ(test1.pose.orientation.z, 0);
+    ASSERT_EQ(test1.pose.orientation.w, 1.0);
 
-/**
- * @brief Test to check inRangeCheck functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestInRangeCheck) {
-}
-
-/**
- * @brief Test to check inRangeCheck functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestInRangeCheck) {
-}
-
-/**
- * @brief Test to check inRangeCheck functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestInRangeCheck) {
-}
-
-/**
- * @brief Test to check inRangeCheck functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestInRangeCheck) {
-}
-
-/**
- * @brief Test to check taskPlanner functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestTaskPlanner) {
+    ASSERT_EQ(test2.pose.position.x, 1);
+    ASSERT_EQ(test2.pose.position.y, -1);
+    ASSERT_EQ(test2.pose.position.z, 0);
+    ASSERT_EQ(test2.pose.orientation.x, 0);
+    ASSERT_EQ(test2.pose.orientation.y, 0);
+    ASSERT_EQ(test2.pose.orientation.z, 0);
+    ASSERT_EQ(test2.pose.orientation.w, 1.0);
 }

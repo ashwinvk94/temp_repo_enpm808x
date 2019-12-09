@@ -44,12 +44,48 @@
 #include "kids_next_door/toyFound.h"
 #include "../include/TaskPlanner.hpp"
 
+typedef actionlib::SimpleActionClient<control_msgs::PointHeadAction> PointHeadClient;
+typedef boost::shared_ptr<PointHeadClient> PointHeadClientPtr;
+
+PointHeadClientPtr pointHeadClient;
+
 TaskPlanner::TaskPlanner() {
     ROS_INFO_STREAM("Constructing TaskPlanner node...");
     /* Check if everything is OK */
     if (!ros::ok()) {
         ROS_FATAL_STREAM("ROS node is not running.");
     }
+
+    UserInterface ui(std::cin, std::cout);
+
+    /* Initialize ist of toy IDs */
+    toyIDs = ui.getIDs();
+
+    /* Initialie storage location */
+    storagePose = ui.getStorageLocation();
+
+    /* List of trajectory points for search */
+    geometry_msgs::PoseStamped temp;
+    temp.pose.position.x = 0;
+    temp.pose.position.y = -7;
+    temp.pose.position.z = 0;
+    temp.pose.orientation.x = 0;
+    temp.pose.orientation.y = 0;
+    temp.pose.orientation.z = -0.7071;
+    temp.pose.orientation.w = 0.7071;
+    searchPoses.push_back(temp);
+
+    initializeServiceClients();
+}
+
+TaskPlanner::TaskPlanner(std::istream& inputStream, std::ostream& outputStream) {
+    ROS_INFO_STREAM("Constructing TaskPlanner node...");
+    /* Check if everything is OK */
+    if (!ros::ok()) {
+        ROS_FATAL_STREAM("ROS node is not running.");
+    }
+
+    UserInterface ui(inputStream, outputStream);
 
     /* Initialize ist of toy IDs */
     toyIDs = ui.getIDs();
@@ -120,6 +156,7 @@ int TaskPlanner::moveToPose(geometry_msgs::PoseStamped pose) {
     }
 }
 
+
 void TaskPlanner::taskPlanner() {
     /* Create iterator for toy IDs */
     std::vector<int>::iterator currToyID = toyIDs.begin();
@@ -133,6 +170,7 @@ void TaskPlanner::taskPlanner() {
     int reachedStorgeFlag = 0;
     int storedToyFlag = 0;
     int cleanupFlag = 0;
+    storagePose.pose.orientation.w = 1;
 
     while (ros::ok()) {
         /* If cleanup of toys needs to be done */
@@ -142,14 +180,15 @@ void TaskPlanner::taskPlanner() {
                 ROS_INFO_STREAM("Looking for toy with ID : " << *currToyID);
                 if (lookForToy(*currToyID) == 1) {   // Look for toy
                     ROS_INFO_STREAM("Found toy with ID : " << *currToyID);
-                    reachedToyFlag = goToToy();
+                    reachedToyFlag = moveToPose(toyPose);
                 } else {        // Search if can't see toy
+                    ROS_INFO_STREAM("Exploring...");
                     if (currSearchPose == searchPoses.end()) {
                         /* Current ID could not be found, move to next */
                         ROS_INFO_STREAM("Current ID could not be" <<
-                                         "found, moving to next.");
+                                        " found, moving to next.");
                         storedToyFlag = 1;
-                    } else if (search(*currSearchPose) == 1) {
+                    } else if (moveToPose(*currSearchPose) == 1) {
                         currSearchPose++;
                     }
                 }
@@ -165,7 +204,7 @@ void TaskPlanner::taskPlanner() {
             /* If toy has been picked, go to storage */
             if (pickedToyFlag == 1 && reachedStorgeFlag == 0){
                 ROS_INFO_STREAM("Going to storage");
-                if (goToStorage() == 1) {
+                if (moveToPose(storagePose) == 1) {
                     ROS_INFO_STREAM("Reached storage");
                     reachedStorgeFlag = 1;
                 }
@@ -205,6 +244,7 @@ int TaskPlanner::lookForToy(int toyID) {
     srv.request.id.data= toyID;
     if (toyFoundClient.call(srv)) {
         toyPose = srv.response.toyPose;
+        std::cout<<srv.response.detection<<std::endl;
         if (srv.response.detection.data) {
             return 1;
         } else {
@@ -219,12 +259,8 @@ int TaskPlanner::lookForToy(int toyID) {
 int TaskPlanner::goToToy() {
     kids_next_door::moveTo srv;
     std::cout << toyPose;
-    geometry_msgs::PoseStamped temp;
-    temp.pose.position.x = toyPose.pose.position.x;
-    temp.pose.position.y = toyPose.pose.position.y;
-    temp.pose.position.z = toyPose.pose.position.z;
-    temp.pose.orientation.w = 1.0;
-    srv.request.goalPose = temp;
+
+    srv.request.goalPose = toyPose;
     if (goalPoseClient.call(srv)) {
         if (srv.response.reachedGoal.data) {
             return 1;
@@ -264,18 +300,3 @@ void TaskPlanner::shutdownRobot() {
 
 }
 
-int main(int argc, char** argv){
-	ros::init(argc, argv, "TaskPlanner"); //node name
-
-	ros::NodeHandle nh; // create a node handle; need to pass this to the class constructor
-
-	ROS_INFO_STREAM("Started TaskPlanner node");
-
-	
-	TaskPlanner tp;
-
-    tp.taskPlanner();
-	// ROS_INFO_STREAM("Spinning");
-	
-	return 0;
-};

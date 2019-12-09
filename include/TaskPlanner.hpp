@@ -39,9 +39,12 @@
 #include <iterator>
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
+#include <boost/shared_ptr.hpp>
+#include <control_msgs/PointHeadAction.h>
+
 #include "ros/ros.h"
-#include "../include/ROSModule.hpp"
-#include "../include/UserInterface.hpp"
+#include "ROSModule.hpp"
+#include "UserInterface.hpp"
 #include "geometry_msgs/PoseStamped.h"
 #include "kids_next_door/moveTo.h"
 #include "kids_next_door/toyFound.h"
@@ -57,6 +60,17 @@ class TaskPlanner : public ROSModule {
      * @return None
      */
     TaskPlanner();
+
+    /**
+     * @brief Constructor for class with input/output stream arguments
+     *
+     * @param inputStream Input Stream object
+     * 
+     * @param outputStream Output Stream object
+     *
+     * @return None
+     */
+    TaskPlanner(std::istream& inputStream, std::ostream& outputStream)
 
     /**
      * @brief Destructor for class
@@ -172,6 +186,7 @@ class TaskPlanner : public ROSModule {
      */
     void taskPlanner();
 
+
   private :
     /* Map object which contains the list of tasks to be performed
      *        by the robot indexed by an integer key for each task */
@@ -194,9 +209,6 @@ class TaskPlanner : public ROSModule {
 
     /* Service Clients */
     ros::ServiceClient toyFoundClient, goalPoseClient;
-
-    /* User Iterface object for getting input */
-    UserInterface ui;
 };
 
 #endif  // INCLUDE_TASKPLANNER_HPP_

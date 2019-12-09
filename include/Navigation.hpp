@@ -39,7 +39,7 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include "ros/ros.h"
-#include "../include/ROSModule.hpp"
+#include "ROSModule.hpp"
 #include "geometry_msgs/PoseStamped.h"
 #include "geometry_msgs/Pose.h"
 #include "kids_next_door/moveTo.h"
