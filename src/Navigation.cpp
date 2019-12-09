@@ -1,7 +1,7 @@
 #include "../include/Navigation.hpp"
 
 Navigation::Navigation() {
-    initializeSubscribers();
+    initializeServiceServers();
 }
 
 void Navigation::initializeServiceServers() {
