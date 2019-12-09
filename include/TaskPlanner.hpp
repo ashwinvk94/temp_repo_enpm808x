@@ -38,6 +38,9 @@
 #include <vector>
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
+#include <boost/shared_ptr.hpp>
+#include <control_msgs/PointHeadAction.h>
+
 #include "ros/ros.h"
 #include "../include/ROSModule.hpp"
 #include "geometry_msgs/PoseStamped.h"
@@ -192,6 +195,7 @@ class TaskPlanner : public ROSModule {
      * @return None
      */
     void taskPlanner();
+
 
   private :
     /**

@@ -42,20 +42,23 @@ int ToyDetection::detectArUco(){
 	int flag;
 	try{
 		flag = 1;
-		listener.lookupTransform("/aruco_marker_frame", "/base_footprint",ros::Time(0),transform);
+		listener.lookupTransform("/map", "/aruco_marker_frame",ros::Time(0),transform);
 	
 
-		ToyDetection::toyPose.header.frame_id="/base_footprint";
+		ToyDetection::toyPose.header.frame_id="/map";
 		ToyDetection::toyPose.header.stamp = ros::Time::now();
 		
 		ToyDetection::toyPose.pose.position.x = transform.getOrigin().x();
-		ToyDetection::toyPose.pose.position.y = transform.getOrigin().y();
-		ToyDetection::toyPose.pose.position.z = transform.getOrigin().z();
+		ToyDetection::toyPose.pose.position.y = transform.getOrigin().y()-0.5;
 
-		ToyDetection::toyPose.pose.orientation.x = transform.getRotation().x();
-		ToyDetection::toyPose.pose.orientation.y = transform.getRotation().y();
-		ToyDetection::toyPose.pose.orientation.z = transform.getRotation().z();
-		ToyDetection::toyPose.pose.orientation.w = transform.getRotation().w();
+		ToyDetection::toyPose.pose.position.z = 0.0;
+
+		ToyDetection::toyPose.pose.orientation.x = 0.0; //transform.getRotation().x();
+		ToyDetection::toyPose.pose.orientation.y = 0.0; //transform.getRotation().y();
+		// ToyDetection::toyPose.pose.orientation.z = transform.getRotation().z();
+		// ToyDetection::toyPose.pose.orientation.w = transform.getRotation().w();
+		ToyDetection::toyPose.pose.orientation.z = -0.7071;
+		ToyDetection::toyPose.pose.orientation.w = 0.7071;
 	}
 	catch(const std::exception&){
 		flag = 0;

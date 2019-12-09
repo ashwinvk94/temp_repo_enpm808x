@@ -33,7 +33,13 @@
 #include <iterator>
 #include <vector>
 
+
 #include "../include/TaskPlanner.hpp"
+
+typedef actionlib::SimpleActionClient<control_msgs::PointHeadAction> PointHeadClient;
+typedef boost::shared_ptr<PointHeadClient> PointHeadClientPtr;
+
+PointHeadClientPtr pointHeadClient;
 
 TaskPlanner::TaskPlanner() {
     ROS_INFO_STREAM("Constructing TaskPlanner node...");
@@ -136,6 +142,7 @@ int TaskPlanner::search(geometry_msgs::PoseStamped searchPose) {
 
 // }
 
+
 void TaskPlanner::taskPlanner() {
     /* Create iterator for toy IDs */
     std::vector<int>::iterator currToyID = toyIDs.begin();
@@ -144,13 +151,37 @@ void TaskPlanner::taskPlanner() {
     std::vector<geometry_msgs::PoseStamped>::iterator currSearchPose = searchPoses.begin();
 
     // /* Set node rate */
-    // ros::Rate loopRate(nodeHz);
+    // ros::Rate loopRate(nodeHz)
+
+    // look down
+  //   boost::shared_ptr<PointHeadClient> pointHeadClient;
+  //   createPointHeadClient( pointHeadClient );
+
+  //   geometry_msgs::PointStamped pointStamped;
+  //   pointStamped.header.frame_id = cameraFrame;
+  //   pointStamped.header.stamp    = latestImageStamp;
+    
+  //   control_msgs::PointHeadGoal goal;
+  //   goal.pointing_frame = cameraFrame;
+  //   goal.pointing_axis.x = 0.0;
+  //   goal.pointing_axis.y = 0.0;
+  //   goal.pointing_axis.z = 1.0;
+  //   goal.min_duration = ros::Duration(1.0);
+  //   goal.max_velocity = 0.25;
+  //   goal.target = pointStamped;
+  //   pointHeadClient->sendGoal(goal);
+  //   ros::Duration(0.5).sleep();
+
+  // pointHeadClient->sendGoal(goal);
+  // ros::Duration(0.5).sleep();
+
 
     int reachedToyFlag = 0;
     int pickedToyFlag = 0;
     int reachedStorgeFlag = 0;
     int storedToyFlag = 0;
     int cleanupFlag = 0;
+    storagePose.pose.orientation.w = 1;
 
     while (ros::ok()) {
         /* If cleanup of toys needs to be done */
@@ -164,7 +195,7 @@ void TaskPlanner::taskPlanner() {
                     if (currSearchPose == searchPoses.end()) {
                         /* Current ID could not be found, move to next */
                         ROS_INFO_STREAM("Current ID could not be" <<
-                                         "found, moving to next.");
+                                        " found, moving to next.");
                         storedToyFlag = 1;
                     } else if (search(*currSearchPose) == 1) {
                         currSearchPose++;
@@ -222,6 +253,7 @@ int TaskPlanner::lookForToy(int toyID) {
     srv.request.id.data= toyID;
     if (toyFoundClient.call(srv)) {
         toyPose = srv.response.toyPose;
+        std::cout<<srv.response.detection<<std::endl;
         if (srv.response.detection.data) {
             return 1;
         } else {
@@ -236,12 +268,8 @@ int TaskPlanner::lookForToy(int toyID) {
 int TaskPlanner::goToToy() {
     kids_next_door::moveTo srv;
     std::cout << toyPose;
-    geometry_msgs::PoseStamped temp;
-    temp.pose.position.x = toyPose.pose.position.x;
-    temp.pose.position.y = toyPose.pose.position.y;
-    temp.pose.position.z = toyPose.pose.position.z;
-    temp.pose.orientation.w = 1.0;
-    srv.request.goalPose = temp;
+
+    srv.request.goalPose = toyPose;
     if (goalPoseClient.call(srv)) {
         if (srv.response.reachedGoal.data) {
             return 1;
