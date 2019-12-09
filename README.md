@@ -1,7 +1,7 @@
 # Kids Next Door
 Pick and Place Robot simulation for toy collection in pre-schools
 
-[![Build Status](https://travis-ci.org/ashwinvk94/temp_repo_enpm808x.svg?branch=travis)](https://travis-ci.org/ashwinvk94/temp_repo_enpm808x)
+[![Build Status](https://travis-ci.org/ashwinvk94/temp_repo_enpm808x.svg?branch=navigation)](https://travis-ci.org/ashwinvk94/temp_repo_enpm808x)
 [![Coverage Status](https://coveralls.io/repos/github/ashwinvk94/temp_repo_enpm808x/badge.svg?branch=navigation)](https://coveralls.io/github/ashwinvk94/temp_repo_enpm808x?branch=navigation)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ---
