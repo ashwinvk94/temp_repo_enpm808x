@@ -24,7 +24,10 @@ void Navigation::setGoal(const geometry_msgs::PoseStamped& goalPose) {
     goal.target_pose.pose.orientation.z = goalPose.pose.orientation.z;
     goal.target_pose.pose.orientation.w = goalPose.pose.orientation.w;
 }
+move_base_msgs::MoveBaseGoal Navigation::getGoalPose() {
+    return this->goal;
 
+}
 bool Navigation::moveToSrv(kids_next_door::moveTo::Request& req,
                            kids_next_door::moveTo::Response& resp) {
     typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;

@@ -41,13 +41,25 @@
  *
  * @return none
  */
-TEST(NavigationClassTest, TestMoveToService) {
+TEST(NavigationClassTest, TestMoveToServiceExistence) {
     //Navigation nav;
     // create node handle object
     ros::NodeHandle n;
     ros::ServiceClient goalPoseClient = n.serviceClient<kids_next_door::moveTo>("/knd/moveTo");
     bool exists = goalPoseClient.waitForExistence(ros::Duration(5));
     ASSERT_TRUE(exists);
+}
+
+TEST(NavigationClassTest, TestSetGoalMethod) {
+    Navigation nav;
+    // generate a random goal pose
+    geometry_msgs::PoseStamped randomPose;
+    randomPose.pose.position.x = 1.0;
+    randomPose.pose.orientation.w = 1.0;
+    nav.setGoal(randomPose);
+    move_base_msgs::MoveBaseGoal goalPose = nav.getGoalPose();
+    ASSERT_EQ(goalPose.target_pose.pose.position.x, randomPose.pose.position.x);
+    ASSERT_EQ(goalPose.target_pose.pose.orientation.w, randomPose.pose.orientation.w);
 }
 
 /**
