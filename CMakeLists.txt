@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(kids_next_door)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+# Compile as C++11, supported in ROS Kinetic and newer
+add_compile_options(-std=c++11)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -18,7 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 ## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+find_package( OpenCV REQUIRED highgui imgproc core videoio imgcodecs aruco)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -122,6 +124,7 @@ catkin_package(
 include_directories(
 	include
  # ${Boost_INCLUDE_DIRS}
+  ${CMAKE_SOURCE_DIR}/include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -139,13 +142,13 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/kids_next_door_node.cpp)
 
-add_executable(Navigation src/Navigation.cpp)
+add_executable(Navigation src/navigationNode.cpp src/Navigation.cpp)
 target_link_libraries(Navigation ${catkin_LIBRARIES})
 add_dependencies(Navigation ${${PROJECT_NAME}_EXPORTED_TARGETS})
-add_executable(ToyDetection src/ToyDetection.cpp)
+add_executable(ToyDetection src/toyDetectionNode.cpp src/ToyDetection.cpp)
 target_link_libraries(ToyDetection ${catkin_LIBRARIES})
 add_dependencies(ToyDetection ${${PROJECT_NAME}_EXPORTED_TARGETS})
-add_executable(TaskPlanner src/TaskPlanner.cpp)
+add_executable(TaskPlanner src/taskPlannerNode.cpp src/TaskPlanner.cpp src/UserInterface.cpp)
 target_link_libraries(TaskPlanner ${catkin_LIBRARIES})
 add_dependencies(TaskPlanner ${${PROJECT_NAME}_EXPORTED_TARGETS})
 # add_dependencies(kids_next_door kids_next_door_generate_messages_cpp)

@@ -73,14 +73,10 @@ class Navigation : public ROSModule {
   void initializeServiceServers();
   void setGoal(const geometry_msgs::PoseStamped& goalPose);
  private :
-  /**
-   * @brief pose of the target in the robot's body frame   
-   */
+  /* Pose of the target in the robot's body frame */
   move_base_msgs::MoveBaseGoal goal;
 
-  /**
-   * @brief pose of the target in the robot's body frame   
-   */
+  /* Pose of the target in the robot's body frame */
   ros::NodeHandle handler;
 
   ros::ServiceServer server;

@@ -90,7 +90,7 @@ geometry_msgs::PoseStamped UserInterface::getStorageLocation() {
     return storageLocation;
 }
 
-std::vector<int> getIDs () {
+std::vector<int> UserInterface::getIDs() {
     std::vector<int> toyIDs;
     /* Initializing list of toy IDs (constant for demo) */
     toyIDs.push_back(0);

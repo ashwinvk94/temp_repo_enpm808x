@@ -34,6 +34,7 @@
 
 #include "ros/ros.h"
 #include "../include/TaskPlanner.hpp"
+#include "../include/UserInterface.hpp"
 
 int main(int argc, char** argv){
 	ros::init(argc, argv, "taskPlanner"); //node name

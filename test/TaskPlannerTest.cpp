@@ -48,8 +48,7 @@ TEST(TaskPlannerClassTest, TestMainNode) {
     std::istringstream mockInputBuffer("y");
     std::ostringstream mockOutputBuffer;
     TaskPlanner tp(mockInputBuffer, mockOutputBuffer);
-
-
+    ASSERT_EQ(tp.taskPlanner(), 1);
 }
 
 /**
@@ -59,65 +58,25 @@ TEST(TaskPlannerClassTest, TestMainNode) {
  *
  * @return none
  */
-TEST(TaskPlannerClassTest, TestMoveToP) {
+TEST(TaskPlannerClassTest, TestMoveToPose) {
+    std::istringstream mockInputBuffer("y");
+    std::ostringstream mockOutputBuffer;
+    TaskPlanner tp(mockInputBuffer, mockOutputBuffer);
+    geometry_msgs::PoseStamped test1;
+    ASSERT_EQ(tp.moveToPose(test1), -1);
 }
 
 /**
- * @brief Test to check goToToy functionality
+ * @brief Test to check lookForToy functionality
  *
  * @param none
  *
  * @return none
  */
-TEST(TaskPlannerClassTest, TestGoToToy) {
+TEST(TaskPlannerClassTest, TestLookForToy) {
+    std::istringstream mockInputBuffer("y");
+    std::ostringstream mockOutputBuffer;
+    TaskPlanner tp(mockInputBuffer, mockOutputBuffer);
+    ASSERT_EQ(tp.lookForToy(0), -1);
 }
 
-/**
- * @brief Test to check inRangeCheck functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestInRangeCheck) {
-}
-
-/**
- * @brief Test to check inRangeCheck functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestInRangeCheck) {
-}
-
-/**
- * @brief Test to check inRangeCheck functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestInRangeCheck) {
-}
-
-/**
- * @brief Test to check inRangeCheck functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestInRangeCheck) {
-}
-
-/**
- * @brief Test to check taskPlanner functionality
- *
- * @param none
- *
- * @return none
- */
-TEST(TaskPlannerClassTest, TestTaskPlanner) {
-}

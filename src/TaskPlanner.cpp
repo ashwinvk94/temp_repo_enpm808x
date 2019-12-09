@@ -125,21 +125,21 @@ void TaskPlanner::initializeServiceClients() {
     /* Client for picking up block */
 }
 
-int TaskPlanner::search(geometry_msgs::PoseStamped searchPose) {
-    ROS_INFO_STREAM("Searching for toys");
-    kids_next_door::moveTo srv;
-    srv.request.goalPose = searchPose;
-    if (goalPoseClient.call(srv)) {
-        if (srv.response.reachedGoal.data) {
-            return 1;
-        } else {
-            return 0;
-        }
-    } else {
-        ROS_INFO_STREAM("Failed to call moveTo service.");
-        return -1;
-    }
-}
+// int TaskPlanner::search(geometry_msgs::PoseStamped searchPose) {
+//     ROS_INFO_STREAM("Searching for toys");
+//     kids_next_door::moveTo srv;
+//     srv.request.goalPose = searchPose;
+//     if (goalPoseClient.call(srv)) {
+//         if (srv.response.reachedGoal.data) {
+//             return 1;
+//         } else {
+//             return 0;
+//         }
+//     } else {
+//         ROS_INFO_STREAM("Failed to call moveTo service.");
+//         return -1;
+//     }
+// }
 
 int TaskPlanner::moveToPose(geometry_msgs::PoseStamped pose) {
     kids_next_door::moveTo srv;
@@ -157,7 +157,7 @@ int TaskPlanner::moveToPose(geometry_msgs::PoseStamped pose) {
 }
 
 
-void TaskPlanner::taskPlanner() {
+int TaskPlanner::taskPlanner() {
     /* Create iterator for toy IDs */
     std::vector<int>::iterator currToyID = toyIDs.begin();
 
@@ -233,10 +233,11 @@ void TaskPlanner::taskPlanner() {
                 cleanupFlag = true;
             }
         } else {
-            shutdownRobot();
+            // shutdownRobot();
             break;
         }
     }
+    return 1;
 }
 
 int TaskPlanner::lookForToy(int toyID) {
@@ -256,47 +257,46 @@ int TaskPlanner::lookForToy(int toyID) {
     }
 }
 
-int TaskPlanner::goToToy() {
-    kids_next_door::moveTo srv;
-    std::cout << toyPose;
+// int TaskPlanner::goToToy() {
+//     kids_next_door::moveTo srv;
+//     std::cout << toyPose;
 
-    srv.request.goalPose = toyPose;
-    if (goalPoseClient.call(srv)) {
-        if (srv.response.reachedGoal.data) {
-            return 1;
-        } else {
-            return 0;
-        }
-    } else {
-        ROS_INFO_STREAM("Failed to call moveTo service.");
-        return -1;
-    }
-}
+//     srv.request.goalPose = toyPose;
+//     if (goalPoseClient.call(srv)) {
+//         if (srv.response.reachedGoal.data) {
+//             return 1;
+//         } else {
+//             return 0;
+//         }
+//     } else {
+//         ROS_INFO_STREAM("Failed to call moveTo service.");
+//         return -1;
+//     }
+// }
 
 int TaskPlanner::pickUpToy() {
     return 1;
 }
 
-int TaskPlanner::goToStorage() {
-    kids_next_door::moveTo srv;
-    srv.request.goalPose = storagePose;
-    if (goalPoseClient.call(srv)) {
-        if (srv.response.reachedGoal.data) {
-            return 1;
-        } else {
-            return 0;
-        }
-    } else {
-        ROS_INFO_STREAM("Failed to call moveTo service.");
-        return -1;
-    }
-}
+// int TaskPlanner::goToStorage() {
+//     kids_next_door::moveTo srv;
+//     srv.request.goalPose = storagePose;
+//     if (goalPoseClient.call(srv)) {
+//         if (srv.response.reachedGoal.data) {
+//             return 1;
+//         } else {
+//             return 0;
+//         }
+//     } else {
+//         ROS_INFO_STREAM("Failed to call moveTo service.");
+//         return -1;
+//     }
+// }
 
 int TaskPlanner::storeToy() {
     return 1;
 }
 
-void TaskPlanner::shutdownRobot() {
-
-}
+// void TaskPlanner::shutdownRobot() {
+// }
 

@@ -43,8 +43,8 @@
 #include <control_msgs/PointHeadAction.h>
 
 #include "ros/ros.h"
-#include "ROSModule.hpp"
-#include "UserInterface.hpp"
+#include "../include/ROSModule.hpp"
+#include "../include/UserInterface.hpp"
 #include "geometry_msgs/PoseStamped.h"
 #include "kids_next_door/moveTo.h"
 #include "kids_next_door/toyFound.h"
@@ -70,7 +70,7 @@ class TaskPlanner : public ROSModule {
      *
      * @return None
      */
-    TaskPlanner(std::istream& inputStream, std::ostream& outputStream)
+    TaskPlanner(std::istream& inputStream, std::ostream& outputStream);
 
     /**
      * @brief Destructor for class
@@ -184,13 +184,13 @@ class TaskPlanner : public ROSModule {
      *
      * @return None
      */
-    void taskPlanner();
+    int taskPlanner();
 
 
   private :
-    /* Map object which contains the list of tasks to be performed
-     *        by the robot indexed by an integer key for each task */
-    std::map<int, std::string> taskList; 
+    // /* Map object which contains the list of tasks to be performed
+    //  *        by the robot indexed by an integer key for each task */
+    // std::map<int, std::string> taskList; 
 
     /* List of ArUco tag IDs to be picked */
     std::vector<int> toyIDs; 

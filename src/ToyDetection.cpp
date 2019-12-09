@@ -101,15 +101,4 @@ int ToyDetection::detectArUco(){
 		flag = 0;
 	}
 	return flag;
-}
-
-int main(int argc, char** argv){
-	ros::init(argc, argv, "toy_detection"); //node name
-
-	ROS_INFO_STREAM("Started ToyDetection node");
-	
-	ROSModule * toy_detection =  new ToyDetection();
-
-	ros::spin();
-	return 0;
-}
+};
