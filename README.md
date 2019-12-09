@@ -1,12 +1,13 @@
 # Kids Next Door
 Pick and Place Robot simulation for toy collection in pre-schools
 
-[![Build Status](https://travis-ci.org/ashwinvk94/temp_repo_enpm808x.svg?branch=navigation)](https://travis-ci.org/ashwinvk94/temp_repo_enpm808x)
+[![Build Status](https://travis-ci.org/ashwinvk94/temp_repo_enpm808x.svg?branch=travis)](https://travis-ci.org/ashwinvk94/temp_repo_enpm808x)
 [![Coverage Status](https://coveralls.io/repos/github/ashwinvk94/temp_repo_enpm808x/badge.svg?branch=navigation)](https://coveralls.io/github/ashwinvk94/temp_repo_enpm808x?branch=navigation)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ---
 
 ## Overview
+[![Packagist](https://img.shields.io/badge/Presentation-Package%20Overview-orange)](https://docs.google.com/presentation/d/1R5EU2CfvaldmRV84qFZ2hX7EPySojRmqfAA-AZ3_Riw/edit#slide=id.gc6f73a04f_0_0)
 
 This repository contains the simulation of a mobile manipulator robot, __Tiago++__, used for pick and place operations for tidying up toys in play areas. This system can be deployed in child-care centers and pre-schools for after-hours cleanup. The robot operates in a known map with a known covariance of where the toys could be. Each type of toy contains an ArUco marker with a unique id which are pre-known. This helps in both easy identification of toys for segregation and pose computation for moving towards a new -found toy.
 
@@ -45,6 +46,8 @@ source devel/setup.bash
 ```
 
 ## Running the simulation demo
+[![Packagist](https://img.shields.io/badge/Video-Simulation%20Demo-orange)](https://youtu.be/zliubN6feGw)
+
 Once the build is complete successfully and you have sourced the bash file, you can run it using roslaunch:
 ```
 roslaunch kids_next_door combined.launch
