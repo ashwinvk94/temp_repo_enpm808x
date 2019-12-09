@@ -1,0 +1,5 @@
+<launch>
+  <test test-name="NavigationTest" pkg="kids_next_door" type="NavigationTest" />
+  <node pkg="kids_next_door" type="NavigationTest" name="NavigationTest" />
+
+</launch>

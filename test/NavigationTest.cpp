@@ -42,13 +42,12 @@
  * @return none
  */
 TEST(NavigationClassTest, TestMoveToService) {
-    Navigation nav;
+    //Navigation nav;
     // create node handle object
     ros::NodeHandle n;
-    ros::ServiceClient goalPoseClient = n.serviceClient<kids_next_door::moveTo>(
-                    "/knd/moveTo");
+    ros::ServiceClient goalPoseClient = n.serviceClient<kids_next_door::moveTo>("/knd/moveTo");
     bool exists = goalPoseClient.waitForExistence(ros::Duration(5));
-    EXPECT_TRUE(exists);
+    ASSERT_TRUE(exists);
 }
 
 /**
@@ -58,12 +57,13 @@ TEST(NavigationClassTest, TestMoveToService) {
  *
  * @return none
  */
-TEST(NavigationClassTest, TestLocalizeCb) {
+// TEST(NavigationClassTest, TestLocalizeCb) {
 
-}
+// }
 
-// int main(int argc, char ** argv) {
-// 	::testing::InitGoogleTest(&argc, argv);
-// 	ros::init(argc, argv, "kndTest");
-// 	return RUN_ALL_TESTS();
-// };
+int main(int argc, char ** argv) {
+	::testing::InitGoogleTest(&argc, argv);
+ 	ros::init(argc, argv, "test1");
+	ros::NodeHandle nh;
+ 	return RUN_ALL_TESTS();
+};
