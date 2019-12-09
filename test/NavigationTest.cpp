@@ -31,50 +31,33 @@
  */
 
 #include <gtest/gtest.h>
-// #include "../include/Navigation.hpp"
 #include "../include/Navigation.hpp"
 
 /**
- * @brief Test to check moveBasePub functionality
- *
- * @param none
- *
- * @return none
+ * @brief Test to check moveTo service
  */
 TEST(NavigationClassTest, TestMoveToService) {
-    //Navigation nav;
     // create node handle object
     ros::NodeHandle n;
     ros::ServiceClient goalPoseClient = n.serviceClient<kids_next_door::moveTo>("/knd/moveTo");
     bool exists = goalPoseClient.waitForExistence(ros::Duration(5));
     ASSERT_TRUE(exists);
 }
+
+/** 
+ * @brief Test to check setGoal method to set goal 
+ *		  to a received pose during the service call
+ */
 TEST(NavigationClassTest, TestSetGoalMethod) {
 	Navigation nav;
 	// generate a random goal pose
 	geometry_msgs::PoseStamped randomPose;
 	randomPose.pose.position.x = 1.0;
 	randomPose.pose.orientation.w = 1.0;
+	
 	nav.setGoal(randomPose);
 	move_base_msgs::MoveBaseGoal goalPose = nav.getGoal();
 	ASSERT_EQ(goalPose.target_pose.pose.position.x, randomPose.pose.position.x);
 	ASSERT_EQ(goalPose.target_pose.pose.orientation.w, randomPose.pose.orientation.w);
 }
 
-/**
- * @brief Test to check localizeCb functionality
- *
- * @param none
- *
- * @return none
- */
-// TEST(NavigationClassTest, TestLocalizeCb) {
-
-// }
-
-int main(int argc, char ** argv) {
-	::testing::InitGoogleTest(&argc, argv);
- 	ros::init(argc, argv, "test1");
-	ros::NodeHandle nh;
- 	return RUN_ALL_TESTS();
-};

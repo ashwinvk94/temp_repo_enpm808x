@@ -3,16 +3,19 @@
 #include "ToyDetection.hpp"
 
 ToyDetection::ToyDetection() {
-	initializePublishers();
 	initializeSubscribers();
+	initializeServiceServers();
 }
 
 void ToyDetection::initializeSubscribers(){
-	ros::Subscriber arucoSub = nh.subscribe("/knd/aruco_detected",10, &ToyDetection::detectionCb,this);
-	ros::ServiceServer server = nh.advertiseService("/knd/toyFound", &ToyDetection::findToySrv, this);
-	ros::spin();
+	arucoSub = nh.subscribe("/knd/aruco_detected",10, &ToyDetection::detectionCb,this);
+	ros::spinOnce();
 }
 
+void ToyDetection::initializeServiceServers() {
+	server = nh.advertiseService("/knd/toyFound", &ToyDetection::findToySrv, this);
+	ros::spinOnce();
+}
 bool ToyDetection::findToySrv(kids_next_door::toyFound::Request& req,
                            kids_next_door::toyFound::Response& resp) {
     std_msgs::Int32 id = req.id;
@@ -63,13 +66,3 @@ int ToyDetection::detectArUco(){
 	return flag;
 }
 
-int main(int argc, char** argv){
-	ros::init(argc, argv, "toy_detection"); //node name
-
-	ROS_INFO_STREAM("Started ToyDetection node");
-	
-	ROSModule * toy_detection =  new ToyDetection();
-
-	ros::spin();
-	return 0;
-}
