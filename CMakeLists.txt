@@ -108,7 +108,7 @@ generate_messages(
 catkin_package(
 #INCLUDE_DIRS include
 #LIBRARIES kids_next_door
- CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs
+ CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs message_runtime message_generation
 # CATKIN_DEPENDS message_runtime
 # DEPENDS system_lib
 )
@@ -141,11 +141,14 @@ include_directories(
 
 add_executable(Navigation src/Navigation.cpp)
 target_link_libraries(Navigation ${catkin_LIBRARIES})
+add_dependencies(Navigation ${${PROJECT_NAME}_EXPORTED_TARGETS})
 add_executable(ToyDetection src/ToyDetection.cpp)
 target_link_libraries(ToyDetection ${catkin_LIBRARIES})
+add_dependencies(ToyDetection ${${PROJECT_NAME}_EXPORTED_TARGETS})
 add_executable(TaskPlanner src/TaskPlanner.cpp)
 target_link_libraries(TaskPlanner ${catkin_LIBRARIES})
-#add_dependencies(kids_next_door kids_next_door_generate_messages_cpp)
+add_dependencies(TaskPlanner ${${PROJECT_NAME}_EXPORTED_TARGETS})
+# add_dependencies(kids_next_door kids_next_door_generate_messages_cpp)
 
 
 #add_executable(test_move_base src/test_move_base.cpp)
