@@ -62,8 +62,8 @@ TEST(NavigationClassTest, TestLocalizeCb) {
 
 }
 
-int main(int argc, char ** argv) {
-	::testing::InitGoogleTest(&argc, argv);
-	ros::init(argc, argv, "kndTest");
-	return RUN_ALL_TESTS();
-};
+// int main(int argc, char ** argv) {
+// 	::testing::InitGoogleTest(&argc, argv);
+// 	ros::init(argc, argv, "kndTest");
+// 	return RUN_ALL_TESTS();
+// };

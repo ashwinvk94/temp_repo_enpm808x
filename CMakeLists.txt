@@ -139,7 +139,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/kids_next_door_node.cpp)
 
-add_executable(Navigation src/Navigation.cpp)
+add_executable(Navigation src/main.cpp src/Navigation.cpp )
 target_link_libraries(Navigation ${catkin_LIBRARIES})
 add_dependencies(Navigation ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
@@ -216,11 +216,12 @@ add_dependencies(TaskPlanner ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
-  add_rostest_gtest(kndTest 
-                test/NavigationTest.cpp 
+  add_rostest_gtest(kndTest test/kndTests.launch
+                test/main.cpp
+                test/NavigationTest.cpp  
                 src/Navigation.cpp)
   target_link_libraries(kndTest ${catkin_LIBRARIES})
-  add_dependencies(kndTest kids_next_door ${catkin_EXPORTED_TARGETS})
+  add_dependencies(kndTest kids_next_door ${${PROJECT_NAME}_EXPORTED_TARGETS})
 endif()
 
 ## Add gtest based cpp test target and link libraries

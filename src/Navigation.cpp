@@ -51,18 +51,18 @@ bool Navigation::moveToSrv(kids_next_door::moveTo::Request& req,
     return true;
 }
 
-int main(int argc, char** argv){
-	ros::init(argc, argv, "navigation"); //node name
+// int main(int argc, char** argv){
+// 	ros::init(argc, argv, "navigation"); //node name
 
-	ros::NodeHandle nh; // create a node handle; need to pass this to the class constructor
+// 	ros::NodeHandle nh; // create a node handle; need to pass this to the class constructor
 
-	ROS_INFO_STREAM("Started navigation node");
+// 	ROS_INFO_STREAM("Started navigation node");
 
 	
-	// ROSModule * nav =  new Navigation();
-    Navigation nav;
-	ROS_INFO_STREAM("Spinning");
+// 	// ROSModule * nav =  new Navigation();
+//     Navigation nav;
+// 	ROS_INFO_STREAM("Spinning");
 	
 	
-	return 0;
-};
+// 	return 0;
+// };
