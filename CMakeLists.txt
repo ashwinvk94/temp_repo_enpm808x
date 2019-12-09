@@ -219,6 +219,7 @@ add_dependencies(TaskPlanner ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage") 
   add_rostest_gtest(test1 test/kndTests.test
                 test/main.cpp
                 test/NavigationTest.cpp 
