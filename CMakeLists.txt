@@ -141,7 +141,7 @@ include_directories(
 
 add_executable(Navigation src/navigationMain.cpp src/Navigation.cpp )
 target_link_libraries(Navigation ${catkin_LIBRARIES})
-add_dependencies(Navigation ${${PROJECT_NAME}_EXPORTED_TARGETS})
+add_dependencies(Navigation ${catkin_EXPORTED_TARGETS})
 
 add_executable(ToyDetection src/ToyDetection.cpp)
 target_link_libraries(ToyDetection ${catkin_LIBRARIES})
